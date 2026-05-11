@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-border: hsl(var(--card-border));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-popover-border: hsl(var(--popover-border));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: Georgia, serif;
+  --font-mono: Menlo, monospace;
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* ── Brand palette ── */
+:root {
+  --fuchsia:        #FF007F;
+  --fuchsia-hover:  #E0006F;
+  --fuchsia-dim:    #CC005F;
+  --charcoal:       #0F0F0F;
+  --card-dark:      #1A1A1A;
+
+  --background: 240 5% 96%;
+  --foreground: 0 0% 7%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 100%;
+  --card-border: 0 0% 88%;
+  --border: 0 0% 88%;
+  --primary: 330 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 330 40% 40%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 240 5% 92%;
+  --muted-foreground: 0 0% 40%;
+  --accent: 330 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --input: 0 0% 92%;
+  --ring: 330 100% 50%;
+  --radius: 0.875rem;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 100%;
+  --popover-border: 0 0% 18%;
+  --sidebar: 0 0% 10%;
+  --sidebar-foreground: 0 0% 100%;
+  --sidebar-border: 0 0% 18%;
+  --sidebar-primary: 330 100% 50%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 0 0% 16%;
+  --sidebar-accent-foreground: 0 0% 100%;
+  --sidebar-ring: 330 100% 50%;
+  --chart-1: 330 100% 50%;
+  --chart-2: 330 60% 55%;
+  --chart-3: 280 70% 55%;
+  --chart-4: 120 50% 45%;
+  --chart-5: 200 70% 55%;
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  body {
+    @apply font-sans antialiased;
+    background: #F2F2F5;
+    color: #111111;
+    min-height: 100vh;
+    text-shadow: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 700;
+    text-shadow: none;
+  }
+
+  p, span, td, th, label, a { text-shadow: none; }
+  nav a, nav button, nav div { font-weight: 600; text-shadow: none; }
+}
+
+/* ── Botanical animations (fuchsia-tinted strokes on off-white) ── */
+@keyframes sway {
+  0%   { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-16px) rotate(4deg); }
+}
+.animate-sway      { animation: sway 10s ease-in-out infinite alternate; }
+.animate-sway-slow { animation: sway 15s ease-in-out infinite alternate-reverse; }
+
+/* ────────────────────────────────────────────────────────────────
+   Panel system
+──────────────────────────────────────────────────────────────── */
+
+/* Dark panel — navbar, footer, dropdowns */
+.glass-panel {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.20);
+  color: #FFFFFF;
+}
+
+/* Matte light-grey card — content cards, search bars */
+.matte-card {
+  background: #EAEAEE;
+  border: 1px solid #DDDDE3;
+  border-radius: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #111111;
+}
+
+/* White input panel */
+.white-panel {
+  background: #FFFFFF;
+  border: 1px solid #DDDDE3;
+  border-radius: 14px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* Vibrant fuchsia card — highlight metrics */
+.fuchsia-card {
+  background: #FF007F;
+  border: none;
+  border-radius: 14px;
+  box-shadow: 0 4px 16px rgba(255, 0, 127, 0.30);
+  color: #FFFFFF;
+}
+
+/* ── Buttons ── */
+.btn-fuchsia {
+  background: #FF007F;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 20px;
+  font-weight: 700;
+  transition: background 0.16s;
+}
+.btn-fuchsia:hover { background: #E0006F; }
+
+.btn-matte {
+  background: #E2E2E8;
+  color: #FF007F;
+  border: none;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: background 0.16s;
+}
+.btn-matte:hover { background: #D5D5DC; }
+
+/* ── Legacy no-ops ── */
+.text-shadow-sm     { text-shadow: none; }
+.text-shadow        { text-shadow: none; }
+.text-shadow-strong { text-shadow: none; }
