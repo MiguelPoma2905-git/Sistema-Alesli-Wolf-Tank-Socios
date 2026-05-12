@@ -14,7 +14,7 @@ Sistema integral de gestión y marketing para la florería Aleslí, desarrollado
 
 
 * **Nombre del grupo:** Los Socios
-* **Rubro asignado/perteneciente:** Desarrollo de Software Comercial / Gestión Logística (Florería)
+* **Rubro asignado/perteneciente:** Líder de Proyecto / Tech Lead / Gestor Kanban
 
 
 
