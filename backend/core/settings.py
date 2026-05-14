@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-l$y()azwlvz3zo)n7k!!aybfoz4dv93wg2ptob@a8x4l7x-@bd'
+SECRET_KEY = 'django-insecure-#o_bj)y9s7=^elx8d=fisr^y$zc=&l$#h%(ve66ru+3($$o1$o'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -37,6 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'usuarios',   
+    'operaciones', 
 ]
 
 MIDDLEWARE = [
@@ -74,8 +78,12 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'alesli_db',
+        'USER': 'postgres',
+        'PASSWORD': '',  # <-- ¡Escribe tu contraseña de Postgres aquí!
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
