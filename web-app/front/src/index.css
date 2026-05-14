@@ -1,0 +1,41 @@
+@import "tailwindcss";
+
+/* 1. LA LLAVE DE TAILWIND V4: Esto conecta el botón con el framework */
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #FF4DB8;
+  --color-secondary: #A855F7;
+  --color-pink-light: #FFF0F8;
+  --color-bg-light: #FFF7FC;
+  --color-text-dark: #1F2937;
+  --color-text-muted: #64748B;
+  --color-success: #10B981;
+  --color-warning: #F59E0B;
+
+  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 2px 16px rgba(255, 77, 184, 0.08);
+  --shadow-card-md: 0 4px 24px rgba(255, 77, 184, 0.13);
+  --shadow-card-lg: 0 8px 48px rgba(255, 77, 184, 0.15);
+}
+
+/* 2. TRANSICIÓN FLUIDA MAESTRA (Fondo y Letras) */
+html, body {
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  overflow-x: hidden;
+  /* Aplicamos el color claro base y le ordenamos que cualquier cambio tome medio segundo */
+  @apply bg-bg-light text-text-dark transition-colors duration-500 ease-in-out;
+}
+
+/* 3. EL COLOR OSCURO (Responde al botón) */
+.dark body {
+  background-color: #0f0f1a;
+  color: #f1f5f9;
+}
+
+/* Scrollbar personalizado intacto */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,77,184,0.3); border-radius: 2px; }
