@@ -1,5 +1,0 @@
-Django==6.0.5
-djangorestframework
-psycopg2-binary
-django-cors-headers
-djangorestframework-simplejwt
