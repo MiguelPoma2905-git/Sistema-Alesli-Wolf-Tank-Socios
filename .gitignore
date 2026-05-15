@@ -1,0 +1,32 @@
+# Entorno
+.env
+.env.local
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+ENV/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Base de datos
+*.db
+*.sqlite
+db.sqlite3
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Dependencias
+node_modules/
+dist/
+build/
