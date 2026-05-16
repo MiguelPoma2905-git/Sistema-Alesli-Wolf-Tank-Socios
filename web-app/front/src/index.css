@@ -62,3 +62,308 @@ h1, h2, h3, h4, h5, h6 {
 .animate-fade-in-up {
   animation: fade-in-up 0.6s ease-out both;
 }
+
+/* ==========================================================================
+   ADMIN DASHBOARD — Aleslí Florería (ported from alesli-dashboard)
+   ========================================================================== */
+
+/* ─── Buttons ─── */
+.btn-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  user-select: none;
+}
+.btn-base:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  user-select: none;
+  background: linear-gradient(to right, #ec4899, #db2777);
+  color: white;
+}
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-primary:hover {
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(0);
+}
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  user-select: none;
+  background: white;
+  border: 1px solid #e5e7eb;
+  color: #374151;
+}
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-secondary:hover {
+  border-color: #f9a8d4;
+  color: #ec4899;
+  background: #fdf2f8;
+  transform: translateY(-1px);
+}
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+  user-select: none;
+  color: #6b7280;
+}
+.btn-ghost:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.btn-ghost:hover {
+  background: #fdf2f8;
+  color: #ec4899;
+}
+.btn-sm  { padding: 0.375rem 0.875rem; font-size: 12px; }
+.btn-md  { padding: 0.5rem 1rem; font-size: 13px; }
+.btn-lg  { padding: 0.625rem 1.25rem; font-size: 14px; }
+
+/* ─── Cards ─── */
+.card {
+  background: white;
+  border-radius: 0.5rem;
+  border: 1px solid #f3f4f6;
+  transition: all 0.2s;
+}
+.card-hover {
+  background: white;
+  border-radius: 0.5rem;
+  border: 1px solid #f3f4f6;
+  transition: all 0.2s;
+}
+.card-hover:hover {
+  transform: translateY(-2px);
+}
+.card-p    { padding: 1.25rem; }
+.card-p-sm { padding: 1rem; }
+.card-p-lg { padding: 1.5rem; }
+
+/* ─── Inputs ─── */
+.input {
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 13px;
+  font-weight: 500;
+  background: #FFF9FC;
+  border: 1px solid #f9a8d4;
+  color: #1f2937;
+  transition: all 0.2s;
+}
+.input::placeholder { color: #9ca3af; }
+.input:focus {
+  outline: none;
+  border-color: #ec4899;
+  background: white;
+  box-shadow: 0 0 0 2px #fce7f3;
+}
+.label {
+  display: block;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 0.375rem;
+}
+
+/* ─── Badges ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 3px 0.625rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.badge-proceso   { background: #dbeafe; color: #1d4ed8; }
+.badge-pendiente { background: #fef9c3; color: #a16207; }
+.badge-listo     { background: #dcfce7; color: #15803d; }
+.badge-entregado { background: #ecfdf5; color: #047857; }
+.badge-cancelado { background: #fee2e2; color: #b91c1c; }
+
+/* ─── Sidebar Navigation ─── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: #6b7280;
+  transition: all 0.2s;
+  position: relative;
+}
+.nav-item:hover {
+  background: #fdf2f8;
+  color: #ec4899;
+}
+.nav-item.active {
+  background: linear-gradient(to right, #fdf2f8, #faf5ff);
+  color: #ec4899;
+  font-weight: 600;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 7px;
+  bottom: 7px;
+  width: 3px;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #ec4899, #a855f7);
+}
+.nav-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.nav-item.active .nav-icon { background: #fce7f3; color: #ec4899; }
+.nav-item:hover .nav-icon  { background: #fdf2f8; color: #f472b6; }
+
+/* ─── Tables ─── */
+.tbl-th {
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: rgba(249,250,251,0.6);
+  border-bottom: 1px solid #f3f4f6;
+}
+.tbl-td {
+  padding: 0.875rem 1rem;
+  font-size: 12.5px;
+  color: #374151;
+  border-bottom: 1px solid #f9fafb;
+}
+.tbl-td:last-child { border-bottom: 0; }
+.tbl-row {
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.tbl-row:hover { background: rgba(253,242,248,0.5); }
+
+/* ─── Section headers ─── */
+.sec-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+.sec-title  { font-size: 17px; font-weight: 800; color: #1f2937; }
+.sec-link {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #ec4899;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s;
+}
+.sec-link:hover { gap: 0.5rem; }
+
+/* ─── KPI ─── */
+.kpi-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 0.75rem;
+}
+.kpi-link {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ec4899;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.kpi-link:hover { gap: 0.5rem; }
+
+/* ─── Pills ─── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.pill-red    { background: #fee2e2; color: #b91c1c; }
+.pill-yellow { background: #fef9c3; color: #a16207; }
+.pill-green  { background: #dcfce7; color: #15803d; }
+
+/* ─── Shadow Utilities ─── */
+.shadow-pink {
+  box-shadow: 0 4px 14px rgba(255, 77, 184, 0.35);
+}
+.shadow-card {
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.05);
+}
+.shadow-card-hover {
+  box-shadow: 0 8px 32px rgba(255, 77, 184, 0.15);
+}
+
+/* ─── Animations ─── */
+@keyframes drawCircle {
+  from { stroke-dashoffset: 220; }
+  to   { stroke-dashoffset: 39.6; }
+}
+@keyframes shimmer {
+  from { background-position: -600px 0; }
+  to   { background-position: 600px 0; }
+}
+.animate-shimmer {
+  animation: shimmer 1.5s infinite linear;
+}
+.donut-track {
+  fill: none; stroke: #FCE7F3; stroke-width: 10;
+}
+.donut-fill {
+  fill: none; stroke-width: 10; stroke-linecap: round;
+  stroke: url(#donutGrad); stroke-dasharray: 220;
+  stroke-dashoffset: 39.6; transform: rotate(-90deg);
+  transform-origin: 50% 50%; animation: drawCircle 1.2s ease forwards;
+}

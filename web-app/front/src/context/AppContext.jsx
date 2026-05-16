@@ -36,6 +36,8 @@ export function AppProvider({ children }) {
     }
   }, [])
 
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
   const [dark, setDark] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark'
@@ -103,6 +105,7 @@ export function AppProvider({ children }) {
       user, setUser, isAuth, setIsAuth,
       roleLabel, roleBadge, isAdmin, isEncargado, isCliente,
       dark, toggleDark,
+      sidebarOpen, setSidebarOpen,
       notifications, setNotifications,
       stats, setStats,
       cart, addToCart, updateQty, removeFromCart, clearCart, cartCount, cartTotal,

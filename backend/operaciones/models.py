@@ -71,6 +71,7 @@ class Producto(models.Model):
     costo_estimado = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     imagen_url = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
+    stock = models.IntegerField(default=0, help_text="Stock disponible del producto")
 
     class Meta:
         db_table = 'productos'

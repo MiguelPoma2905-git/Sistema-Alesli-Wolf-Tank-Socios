@@ -4,6 +4,7 @@ import { ToastProvider } from './context/ToastContext'
 
 import Layout from './components/layouts/Layout'
 import ProtectedRoute from './components/shared/ProtectedRoute'
+import AdminLayout from './components/admin/AdminLayout'
 
 import Dashboard from './pages/Dashboard'
 import { Flores, DetalleProducto, Regalos, Peluches, Chocolate, Ocasiones } from './pages/CatalogPages'
@@ -17,7 +18,16 @@ import Profile from './pages/Profile'
 import SpecialDates from './pages/SpecialDates'
 import Rewards from './pages/Rewards'
 import CustomGift from './pages/CustomGift'
-import AdminDashboard from './pages/AdminDashboard'
+
+import AdminDashboard from './pages/admin/Dashboard'
+import AdminProductos from './pages/admin/Productos'
+import AdminInventario from './pages/admin/Inventario'
+import AdminPedidos from './pages/admin/Pedidos'
+import AdminEntregas from './pages/admin/Entregas'
+import AdminFinanzas from './pages/admin/Finanzas'
+import AdminMarketing from './pages/admin/Marketing'
+import AdminNotificaciones from './pages/admin/Notificaciones'
+import AdminConfiguracion from './pages/admin/Configuraciones'
 
 export default function App() {
   return (
@@ -46,13 +56,25 @@ export default function App() {
               <Route path="fechas" element={<ProtectedRoute roles={['cliente']}><SpecialDates /></ProtectedRoute>} />
               <Route path="recompensas" element={<ProtectedRoute roles={['cliente']}><Rewards /></ProtectedRoute>} />
               <Route path="personalizar" element={<ProtectedRoute><CustomGift /></ProtectedRoute>} />
-              <Route path="admin/dashboard" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
               <Route path="*" element={
                 <div className="py-20 text-center transition-colors duration-500">
                   <h1 className="text-[40px] font-black text-primary">404</h1>
                   <p className="text-text-muted font-bold mt-2 transition-colors duration-500">La página que buscas no existe.</p>
                 </div>
               } />
+            </Route>
+
+            <Route path="/admin" element={<ProtectedRoute roles={['admin']}><AdminLayout /></ProtectedRoute>}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="productos" element={<AdminProductos />} />
+              <Route path="productos/:id" element={<AdminProductos />} />
+              <Route path="inventario" element={<AdminInventario />} />
+              <Route path="pedidos" element={<AdminPedidos />} />
+              <Route path="entregas" element={<AdminEntregas />} />
+              <Route path="finanzas" element={<AdminFinanzas />} />
+              <Route path="marketing" element={<AdminMarketing />} />
+              <Route path="notificaciones" element={<AdminNotificaciones />} />
+              <Route path="configuracion" element={<AdminConfiguracion />} />
             </Route>
           </Routes>
         </BrowserRouter>

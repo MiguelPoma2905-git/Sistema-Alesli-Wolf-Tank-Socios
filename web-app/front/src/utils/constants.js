@@ -67,3 +67,64 @@ export const OCCASIONS = [
   { name: 'Recuperación',         bg: 'linear-gradient(135deg,#312e81,#4338ca)', image: '/images/ocasion_15.jpg' },
   { name: 'Graduación',           bg: 'linear-gradient(135deg,#064e3b,#059669)', image: '/images/ocasion_16.jpg' },
 ]
+
+// ─── Admin Dashboard Routes ─────────────────────────────────────────────────
+export const ROUTES_ADMIN = {
+  DASHBOARD:        '/admin',
+  PRODUCTOS:        '/admin/productos',
+  PRODUCTO_DETALLE: '/admin/productos/:id',
+  INVENTARIO:       '/admin/inventario',
+  CATALOGO:         '/admin/catalogo',
+  CUIDADO_FLORES:   '/admin/cuidado-flores',
+  PEDIDOS_CLIENTES: '/admin/pedidos',
+  ENTREGAS:         '/admin/entregas',
+  DELIVERY:         '/admin/delivery',
+  PEDIDOS_PROV:     '/admin/proveedores',
+  FINANZAS:         '/admin/finanzas',
+  MARKETING:        '/admin/marketing',
+  CAMPANIAS:        '/admin/campanias',
+  NOTIFICACIONES:   '/admin/notificaciones',
+  CONFIGURACION:    '/admin/configuracion',
+  PREFERENCIAS:     '/admin/preferencias',
+}
+
+// ─── Admin Sidebar Navigation ────────────────────────────────────────────────
+export const ADMIN_NAV_SECTIONS = [
+  {
+    label: 'Principal',
+    items: [
+      { id: 'dashboard',  label: 'Dashboard', icon: 'LayoutDashboard', route: ROUTES_ADMIN.DASHBOARD,        badge: null },
+      { id: 'finanzas',   label: 'Finanzas',  icon: 'DollarSign',      route: ROUTES_ADMIN.FINANZAS,         badge: null },
+    ],
+  },
+  {
+    label: 'Operaciones',
+    items: [
+      { id: 'pedidos',    label: 'Pedidos',    icon: 'ShoppingBag',     route: ROUTES_ADMIN.PEDIDOS_CLIENTES, badge: null },
+      { id: 'entregas',   label: 'Entregas',   icon: 'Truck',           route: ROUTES_ADMIN.ENTREGAS,         badge: null },
+      { id: 'delivery',   label: 'Delivery',   icon: 'Bike',            route: ROUTES_ADMIN.DELIVERY,         badge: null },
+      { id: 'inventario', label: 'Inventario', icon: 'Package',         route: ROUTES_ADMIN.INVENTARIO,       badge: null },
+    ],
+  },
+  {
+    label: 'Catálogo',
+    items: [
+      { id: 'productos',  label: 'Productos',  icon: 'Tag',             route: ROUTES_ADMIN.PRODUCTOS,        badge: null },
+      { id: 'catalogo',   label: 'Catálogo',   icon: 'BookOpen',        route: ROUTES_ADMIN.CATALOGO,         badge: null },
+    ],
+  },
+  {
+    label: 'Crecimiento',
+    items: [
+      { id: 'marketing',  label: 'Marketing',  icon: 'TrendingUp',      route: ROUTES_ADMIN.MARKETING,        badge: null },
+      { id: 'campanias',  label: 'Campañas',   icon: 'Megaphone',       route: ROUTES_ADMIN.CAMPANIAS,        badge: null },
+    ],
+  },
+  {
+    label: 'Sistema',
+    items: [
+      { id: 'notificaciones', label: 'Notificaciones', icon: 'Bell',     route: ROUTES_ADMIN.NOTIFICACIONES,  badge: null },
+      { id: 'configuracion',  label: 'Configuración',  icon: 'Settings', route: ROUTES_ADMIN.CONFIGURACION,   badge: null },
+    ],
+  },
+]

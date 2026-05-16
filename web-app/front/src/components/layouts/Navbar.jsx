@@ -91,7 +91,7 @@ export default function Navbar({ onMenuToggle }) {
             <>
               <button
                 onClick={() => {
-                  if (isAdmin) navigate('/admin/dashboard')
+                  if (isAdmin) navigate('/admin')
                   else if (isEncargado) navigate('/')
                   else navigate('/')
                 }}
@@ -112,7 +112,7 @@ export default function Navbar({ onMenuToggle }) {
               )}
 
               {isAdmin && (
-                <button onClick={() => navigate('/admin/dashboard')} className="flex items-center gap-2 px-4 py-2 text-[12px] font-bold uppercase tracking-wider text-secondary border border-secondary/40 hover:bg-secondary hover:text-white transition-all ml-2">
+                <button onClick={() => navigate('/admin')} className="flex items-center gap-2 px-4 py-2 text-[12px] font-bold uppercase tracking-wider text-secondary border border-secondary/40 hover:bg-secondary hover:text-white transition-all ml-2">
                   <LayoutDashboard size={14} /> Admin
                 </button>
               )}
