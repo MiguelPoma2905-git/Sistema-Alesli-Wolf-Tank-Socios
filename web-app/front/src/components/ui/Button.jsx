@@ -8,14 +8,13 @@ export default function Button({
   type = 'button',
   className = '',
 }) {
-  // Base sólida con animación de presionado (active:scale-95)
-  const base = 'inline-flex items-center justify-center gap-2 font-bold rounded-full transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95'
+  const base = 'inline-flex items-center justify-center gap-2 font-bold transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed active:scale-95 border'
 
   const variants = {
-    primary: 'bg-gradient-to-r from-primary to-secondary text-white shadow-md hover:shadow-lg hover:-translate-y-0.5',
-    outline: 'border-2 border-primary text-primary hover:bg-pink-light dark:hover:bg-white/5',
-    green: 'bg-gradient-to-r from-success to-emerald-500 text-white shadow-md hover:shadow-lg hover:-translate-y-0.5',
-    ghost: 'text-text-muted hover:text-primary hover:bg-pink-light dark:hover:bg-white/5',
+    primary: 'bg-primary text-white border-primary hover:bg-accent hover:border-accent shadow-md hover:shadow-lg hover:-translate-y-0.5',
+    outline: 'border-2 border-primary text-primary hover:bg-primary hover:text-white',
+    green: 'bg-success text-white border-success shadow-md hover:shadow-lg hover:opacity-90',
+    ghost: 'border-transparent text-text-muted hover:text-primary',
   }
 
   const sizes = {

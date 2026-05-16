@@ -67,7 +67,7 @@ export function DetalleProducto() {
   const sizes = ['Pequeño', 'Mediano', 'Grande']
   const [selectedSize, setSelectedSize] = useState('Mediano')
   
-  // 🔴 ESTADO DE ANIMACIÓN Y FLUJO
+      // ESTADO DE ANIMACIÓN Y FLUJO
   const [actionStatus, setActionStatus] = useState('idle') // 'idle' | 'cart' | 'buy'
 
   useEffect(() => { 
@@ -89,7 +89,7 @@ export function DetalleProducto() {
 
   const currentPrice = getDynamicPrice()
   const fav = isFav(product.id)
-  const imgs = [product.img || '🎁', '✨', '🎀', '💝']
+  const imgs = [product.img || '/images/placeholder_product.jpg']
   
   const stockLeft = product.stock !== undefined ? product.stock : 12; 
   const isStockLow = stockLeft <= 3 && stockLeft > 0;
@@ -101,7 +101,7 @@ export function DetalleProducto() {
       .slice(0, 4)
   }, [allProducts, product])
 
-  // 🔴 LÓGICA BLINDADA: CARRITO -> ANIMACIÓN -> RETORNO AL CATÁLOGO
+  // LÓGICA BLINDADA: CARRITO -> ANIMACIÓN -> RETORNO AL CATÁLOGO
   const handleAddToCart = () => {
     if (isOutOfStock || actionStatus !== 'idle') return;
     setActionStatus('cart');
@@ -113,7 +113,7 @@ export function DetalleProducto() {
     }, 800);
   }
 
-  // 🔴 LÓGICA BLINDADA: COMPRAR AHORA -> ANIMACIÓN -> CHECKOUT DIRECTO
+  // LÓGICA BLINDADA: COMPRAR AHORA -> ANIMACIÓN -> CHECKOUT DIRECTO
   const handleBuyNow = () => {
     if (isOutOfStock || actionStatus !== 'idle') return;
     setActionStatus('buy');
@@ -245,7 +245,7 @@ export function DetalleProducto() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-8 border-t border-pink-light/50 dark:border-white/5">
-            {['🚚 Envío seguro en La Paz', '🔒 Pagos 100% protegidos', '✨ Calidad Premium', '💌 Tarjeta dedicatoria'].map(f => (
+            {['Envío seguro en La Paz', 'Pagos 100% protegidos', 'Calidad Premium', 'Tarjeta dedicatoria'].map(f => (
               <div key={f} className="flex items-center gap-3 text-[13px] font-bold text-text-muted dark:text-gray-400">
                 <div className="w-6 h-6 rounded-full bg-green-50 dark:bg-green-500/10 flex items-center justify-center text-green-500"><CheckCircle size={12}/></div>
                 {f}
@@ -348,7 +348,7 @@ export function Ocasiones() {
 
       <section className="w-full min-h-[300px] md:h-[400px] rounded-[48px] overflow-hidden relative shadow-card-lg group" style={{ background: nextBigDate.bg }}>
         <div className="absolute inset-0 bg-black/20 dark:bg-black/50 transition-colors z-0"></div>
-        <div className="absolute top-0 right-0 p-10 opacity-30 text-[180px] md:text-[300px] select-none group-hover:rotate-12 transition-transform duration-700 z-0">{nextBigDate.emoji}</div>
+<img src={nextBigDate.image} alt={nextBigDate.name} className="absolute top-0 right-0 h-full w-auto opacity-30 object-contain select-none group-hover:rotate-12 transition-transform duration-700 z-0" />
         <div className="absolute inset-0 p-8 md:p-16 flex flex-col justify-center max-w-2xl z-10">
           <span className="inline-flex items-center px-5 py-2 bg-white/20 text-white backdrop-blur-md text-[11px] font-black uppercase tracking-[3px] rounded-full w-max mb-6">PRÓXIMAMENTE</span>
           <h2 className="text-[44px] md:text-[72px] font-black text-white leading-none mb-4 drop-shadow-lg">{nextBigDate.name}</h2>
@@ -359,9 +359,13 @@ export function Ocasiones() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         {fullCalendar.map((o) => (
           <div key={o.name} onClick={() => navigate('/regalos')} className="group bg-white dark:bg-[#1a1a2e] rounded-[40px] p-8 cursor-pointer border border-pink-light/30 dark:border-white/5 shadow-sm hover:shadow-card-md transition-all duration-500 hover:-translate-y-2 relative overflow-hidden">
-            <div className="absolute -right-4 -bottom-4 text-[100px] opacity-[0.03] group-hover:scale-125 transition-transform duration-500 pointer-events-none">{o.emoji}</div>
+            <div className="absolute -right-4 -bottom-4 w-[100px] h-[100px] opacity-[0.03] group-hover:scale-125 transition-transform duration-500 pointer-events-none">
+              <img src={o.image} alt={o.name} className="w-full h-full object-contain" />
+            </div>
             <div className="flex items-start justify-between mb-6 relative z-10">
-              <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-[32px] shadow-inner" style={{ background: o.bg, color: 'white' }}>{o.emoji}</div>
+              <div className="w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden shadow-inner" style={{ background: o.bg, color: 'white' }}>
+                <img src={o.image} alt={o.name} className="w-full h-full object-contain" />
+              </div>
               <span className="bg-pink-50 dark:bg-white/5 text-primary text-[11px] font-black px-3 py-1.5 rounded-full border border-pink-light/50">{o.date}</span>
             </div>
             <h4 className="text-[20px] font-black text-text-dark dark:text-white mb-2 group-hover:text-primary transition-colors">{o.name}</h4>

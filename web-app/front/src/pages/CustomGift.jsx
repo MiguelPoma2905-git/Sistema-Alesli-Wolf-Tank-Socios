@@ -13,16 +13,16 @@ const BASE_OPTIONS = [
 ]
 
 const FLOWER_OPTIONS = [
-  { id: 'rosa-roja', name: 'Rosas Rojas', price: 15, color: 'bg-red-500', emoji: '🌹' },
-  { id: 'rosa-rosa', name: 'Rosas Rosadas', price: 15, color: 'bg-pink-400', emoji: '🌸' },
-  { id: 'tulipan', name: 'Tulipanes', price: 20, color: 'bg-yellow-400', emoji: '🌷' },
-  { id: 'girasol', name: 'Girasoles', price: 18, color: 'bg-orange-400', emoji: '🌻' }
+  { id: 'rosa-roja', name: 'Rosas Rojas', price: 15, color: 'bg-red-500' },
+  { id: 'rosa-rosa', name: 'Rosas Rosadas', price: 15, color: 'bg-pink-400' },
+  { id: 'tulipan', name: 'Tulipanes', price: 20, color: 'bg-yellow-400' },
+  { id: 'girasol', name: 'Girasoles', price: 18, color: 'bg-orange-400' }
 ]
 
 const EXTRA_OPTIONS = [
-  { id: 'peluche', name: 'Oso de Peluche', price: 80, icon: '🧸' },
-  { id: 'chocolate', name: 'Ferrero Rocher', price: 65, icon: '🍫' },
-  { id: 'mariposas', name: 'Mariposas 3D', price: 20, icon: '🦋' }
+  { id: 'peluche', name: 'Oso de Peluche', price: 80 },
+  { id: 'chocolate', name: 'Ferrero Rocher', price: 65 },
+  { id: 'mariposas', name: 'Mariposas 3D', price: 20 }
 ]
 
 const TEMPLATES = [
@@ -177,17 +177,11 @@ export default function CustomGift() {
                         zIndex: 100 - i
                       }}
                     >
-                      {f.emoji}
+                      <span className="text-[10px] text-white font-black text-center leading-tight px-1">{f.name.split(' ')[0]}</span>
                     </div>
                   ))
                 )}
               </div>
-
-              {customOrder.extras.map((e, i) => (
-                <div key={i} className="absolute text-4xl animate-bounce" style={{ bottom: 120 + (i * 40), right: -20 - (i * 20), zIndex: 110 }}>
-                  {e.icon}
-                </div>
-              ))}
 
               <div className={`w-48 h-24 rounded-t-xl rounded-b-[40px] bg-gradient-to-br ${customOrder.base.color} shadow-2xl relative z-50 flex items-center justify-center border-t-4 border-white/20 transition-colors duration-500`}>
                  <span className="text-white/50 text-[10px] font-black uppercase tracking-widest">{customOrder.base.name}</span>
@@ -232,7 +226,7 @@ export default function CustomGift() {
                 return (
                   <div key={flower.id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
                     <div className="flex items-center gap-3">
-                      <div className="text-xl">{flower.emoji}</div>
+                      <div className={`w-8 h-8 rounded-lg ${flower.color}`}></div>
                       <div>
                         <p className="text-[14px] font-bold text-text-dark dark:text-white">{flower.name}</p>
                         <p className="text-[11px] text-text-muted">{formatPrice(flower.price)} c/u</p>

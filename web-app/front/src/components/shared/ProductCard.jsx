@@ -16,15 +16,7 @@ export default function ProductCard({ product }) {
   const reviewsCount = product.reviews?.length || product.reviews || 0
   const hasStock = product.stock !== false 
 
-  // EL MOTOR DE TAMAÑOS INTACTO
-  let emojiSize = 'text-[90px]'; 
-  if (product.size === 'Pequeño') emojiSize = 'text-[55px]';
-  if (product.size === 'Mediano') emojiSize = 'text-[85px]';
-  if (product.size === 'Grande')  emojiSize = 'text-[115px]';
-  if (product.size === 'Gigante') emojiSize = 'text-[150px]';
-
   return (
-    // h-full asegura que todas las tarjetas en la misma fila del Grid midan exactamente lo mismo
     <div className="group bg-white dark:bg-[#1a1a2e] rounded-[32px] p-4 shadow-sm hover:shadow-card-lg transition-all duration-300 border border-pink-light/30 dark:border-white/5 flex flex-col h-full w-full relative">
       
       <button 
@@ -34,14 +26,11 @@ export default function ProductCard({ product }) {
         <Heart size={18} className={isFavorite ? "fill-primary text-primary" : ""} />
       </button>
 
-      {/* LA CAJA INAMOVIBLE: aspect-square + overflow-hidden neutraliza a los osos gigantes */}
       <div 
         onClick={() => navigate(`/flores/${product.id}`)}
         className="w-full aspect-square shrink-0 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-white/5 dark:to-transparent rounded-[24px] flex items-center justify-center cursor-pointer relative overflow-hidden"
       >
-        <span className={`${emojiSize} transition-transform duration-500 drop-shadow-md leading-none group-hover:scale-110 flex items-center justify-center`}>
-          {product.img || '🎁'}
-        </span>
+        <img src={product.img || '/images/placeholder_product.jpg'} alt={product.name} className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md group-hover:scale-110" />
         
         {!hasStock && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">

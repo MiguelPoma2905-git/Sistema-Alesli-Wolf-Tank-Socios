@@ -25,7 +25,7 @@ export default function HeroCarousel() {
     >
       {/* Etiqueta superior */}
       <div className="absolute top-5 left-8 bg-white/20 backdrop-blur-md text-white text-[12px] font-bold px-4 py-1.5 rounded-full flex items-center gap-2 shadow-sm border border-white/10">
-        <span>🌺</span> {slide.tag}
+{slide.tag}
       </div>
 
       {/* Contador */}
@@ -46,7 +46,7 @@ export default function HeroCarousel() {
           onClick={() => navigate('/flores')}
           className="bg-white text-gray-900 px-6 py-3 rounded-full text-[14px] font-bold shadow-lg hover:scale-105 hover:bg-pink-50 transition-all duration-300"
         >
-          Ver colecciones ✨
+Ver colecciones
         </button>
 
         {/* Indicadores (Dots) */}
@@ -63,7 +63,7 @@ export default function HeroCarousel() {
 
       {/* Decoración (Emoji gigante) */}
       <div className="absolute right-[-20px] md:right-12 top-1/2 -translate-y-1/2 text-[140px] md:text-[180px] opacity-20 md:opacity-40 select-none pointer-events-none drop-shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-700">
-        {slide.emoji}
+<img src={slide.image} alt={slide.tag} className="h-full w-auto max-h-[200px] object-contain opacity-50 select-none pointer-events-none drop-shadow-2xl group-hover:scale-110 group-hover:rotate-6 transition-all duration-700" />
       </div>
 
       {/* Controles de navegación */}

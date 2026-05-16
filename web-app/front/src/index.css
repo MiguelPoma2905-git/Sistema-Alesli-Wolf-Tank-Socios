@@ -1,41 +1,64 @@
 @import "tailwindcss";
 
-/* 1. LA LLAVE DE TAILWIND V4: Esto conecta el botón con el framework */
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #FF4DB8;
-  --color-secondary: #A855F7;
-  --color-pink-light: #FFF0F8;
-  --color-bg-light: #FFF7FC;
-  --color-text-dark: #1F2937;
-  --color-text-muted: #64748B;
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
+  --color-primary: #d0439d;
+  --color-primary-dark: #b50357;
+  --color-secondary: #9f54a0;
+  --color-accent: #ec1b91;
+  --color-accent-light: #d05893;
+  --color-bg-light: #fcf5f3;
+  --color-cream: #f9e5ed;
+  --color-pink-light: #f9e5ed;
+  --color-border-light: #dfb6cf;
+  --color-text-dark: #262626;
+  --color-text-muted: #7a5a6e;
+  --color-success: #2a7a4b;
+  --color-warning: #b8860b;
+  --color-blue-accent: #2596be;
 
-  --font-sans: "Poppins", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  --shadow-card: 0 2px 16px rgba(255, 77, 184, 0.08);
-  --shadow-card-md: 0 4px 24px rgba(255, 77, 184, 0.13);
-  --shadow-card-lg: 0 8px 48px rgba(255, 77, 184, 0.15);
+  --shadow-card: 0 2px 12px rgba(208, 67, 157, 0.06);
+  --shadow-card-md: 0 4px 20px rgba(208, 67, 157, 0.10);
+  --shadow-card-lg: 0 8px 40px rgba(208, 67, 157, 0.12);
 }
 
-/* 2. TRANSICIÓN FLUIDA MAESTRA (Fondo y Letras) */
 html, body {
-  font-family: var(--font-sans);
   min-height: 100vh;
   overflow-x: hidden;
-  /* Aplicamos el color claro base y le ordenamos que cualquier cambio tome medio segundo */
   @apply bg-bg-light text-text-dark transition-colors duration-500 ease-in-out;
 }
 
-/* 3. EL COLOR OSCURO (Responde al botón) */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}
+
 .dark body {
   background-color: #0f0f1a;
   color: #f1f5f9;
 }
 
-/* Scrollbar personalizado intacto */
-::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(255,77,184,0.3); border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: rgba(208, 67, 157, 0.3); }
+
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in {
+  animation: fade-in 0.6s ease-out both;
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out both;
+}

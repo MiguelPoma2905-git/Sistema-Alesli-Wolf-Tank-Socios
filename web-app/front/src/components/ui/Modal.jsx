@@ -16,15 +16,15 @@ export default function Modal({ open, onClose, title, children, maxWidth = 'max-
       onClick={onClose}
     >
       <div
-        className={`bg-white rounded-3xl shadow-[0_8px_48px_rgba(255,77,184,0.2)] w-full mx-4 ${maxWidth} max-h-[90vh] overflow-y-auto`}
+        className={`bg-white shadow-card-lg border border-border-light/30 dark:border-white/10 dark:bg-[#151522] w-full mx-4 ${maxWidth} max-h-[90vh] overflow-y-auto`}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[rgba(255,77,184,0.1)]">
-          <h3 className="text-[16px] font-bold text-[#1F2937]">{title}</h3>
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border-light/30 dark:border-white/10">
+          <h3 className="text-[16px] font-bold text-text-dark dark:text-white">{title}</h3>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full flex items-center justify-center text-[#64748B] hover:bg-[#FFF0F8] hover:text-[#FF4DB8] transition-all"
+            className="w-8 h-8 flex items-center justify-center text-text-muted hover:bg-cream dark:hover:bg-white/5 hover:text-primary transition-all"
           >
             <X size={16} />
           </button>

@@ -173,7 +173,7 @@ export default function Cart() {
           {!isCartLarge && lastMinuteAddons.length > 0 && (
             <div className="bg-gradient-to-br from-bg-light to-white dark:from-white/5 dark:to-[#1a1a2e] rounded-[36px] p-8 border border-pink-light/60 dark:border-white/5 shadow-sm transition-colors duration-500">
               <h3 className="text-[18px] font-black text-text-dark dark:text-white mb-6 flex items-center gap-2">
-                {suggestionTitle} <span className="animate-pulse text-[20px]">✨</span>
+      {suggestionTitle}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 {lastMinuteAddons.map((item, idx) => (

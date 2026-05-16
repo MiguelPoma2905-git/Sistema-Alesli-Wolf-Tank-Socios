@@ -1,59 +1,61 @@
 // ─── FLOWERS ─────────────────────────────────────────────────────────────────
+const PLACEHOLDER = '/images/placeholder_product.jpg'
+
 export const flowers = [
-  { id: 1,  name: 'Rosones rosados premium',    price: 45, img: '🌸', cat: 'Rosas',     rating: 4.8, reviews: 38, stock: true },
-  { id: 2,  name: 'Rosas rojas pasión',          price: 55, img: '🌹', cat: 'Rosas',     rating: 4.9, reviews: 52, stock: true },
-  { id: 3,  name: 'Rosas blancas pureza',        price: 42, img: '🤍', cat: 'Rosas',     rating: 4.7, reviews: 21, stock: true },
-  { id: 4,  name: 'Tulipanes multicolor',        price: 38, img: '🌷', cat: 'Tulipanes', rating: 4.6, reviews: 17, stock: true },
-  { id: 5,  name: 'Tulipanes rosas delicados',   price: 35, img: '🌷', cat: 'Tulipanes', rating: 4.5, reviews: 14, stock: false },
-  { id: 6,  name: 'Girasoles alegres',           price: 32, img: '🌻', cat: 'Girasoles', rating: 4.8, reviews: 29, stock: true },
-  { id: 7,  name: 'Girasoles campo grande',      price: 28, img: '🌻', cat: 'Girasoles', rating: 4.7, reviews: 18, stock: true },
-  { id: 8,  name: 'Orquídeas blancas',           price: 65, img: '🌺', cat: 'Orquídeas', rating: 4.9, reviews: 41, stock: true },
-  { id: 9,  name: 'Orquídeas lilas',             price: 70, img: '💜', cat: 'Orquídeas', rating: 4.8, reviews: 33, stock: true },
-  { id: 10, name: 'Lirios blancos puros',        price: 42, img: '🌼', cat: 'Lirios',    rating: 4.6, reviews: 22, stock: true },
-  { id: 11, name: 'Ramo mixto primavera',        price: 48, img: '💐', cat: 'Mixtos',    rating: 4.7, reviews: 45, stock: true },
-  { id: 12, name: 'Bouquet romántico deluxe',    price: 75, img: '💐', cat: 'Mixtos',    rating: 5.0, reviews: 67, stock: true },
-  { id: 13, name: 'Girasoles del Sol Naciente',  price: 30, img: '🌻', cat: 'Girasoles', rating: 4.9, reviews: 12, stock: true },
-  { id: 14, name: 'Ramo Aurora Boreal',          price: 55, img: '💐', cat: 'Mixtos',    rating: 4.8, reviews: 5,  stock: true },
+  { id: 1,  name: 'Rosones rosados premium',    price: 45, img: PLACEHOLDER, cat: 'Rosas',     rating: 4.8, reviews: 38, stock: true },
+  { id: 2,  name: 'Rosas rojas pasión',          price: 55, img: PLACEHOLDER, cat: 'Rosas',     rating: 4.9, reviews: 52, stock: true },
+  { id: 3,  name: 'Rosas blancas pureza',        price: 42, img: PLACEHOLDER, cat: 'Rosas',     rating: 4.7, reviews: 21, stock: true },
+  { id: 4,  name: 'Tulipanes multicolor',        price: 38, img: PLACEHOLDER, cat: 'Tulipanes', rating: 4.6, reviews: 17, stock: true },
+  { id: 5,  name: 'Tulipanes rosas delicados',   price: 35, img: PLACEHOLDER, cat: 'Tulipanes', rating: 4.5, reviews: 14, stock: false },
+  { id: 6,  name: 'Girasoles alegres',           price: 32, img: PLACEHOLDER, cat: 'Girasoles', rating: 4.8, reviews: 29, stock: true },
+  { id: 7,  name: 'Girasoles campo grande',      price: 28, img: PLACEHOLDER, cat: 'Girasoles', rating: 4.7, reviews: 18, stock: true },
+  { id: 8,  name: 'Orquídeas blancas',           price: 65, img: PLACEHOLDER, cat: 'Orquídeas', rating: 4.9, reviews: 41, stock: true },
+  { id: 9,  name: 'Orquídeas lilas',             price: 70, img: PLACEHOLDER, cat: 'Orquídeas', rating: 4.8, reviews: 33, stock: true },
+  { id: 10, name: 'Lirios blancos puros',        price: 42, img: PLACEHOLDER, cat: 'Lirios',    rating: 4.6, reviews: 22, stock: true },
+  { id: 11, name: 'Ramo mixto primavera',        price: 48, img: PLACEHOLDER, cat: 'Mixtos',    rating: 4.7, reviews: 45, stock: true },
+  { id: 12, name: 'Bouquet romántico deluxe',    price: 75, img: PLACEHOLDER, cat: 'Mixtos',    rating: 5.0, reviews: 67, stock: true },
+  { id: 13, name: 'Girasoles del Sol Naciente',  price: 30, img: PLACEHOLDER, cat: 'Girasoles', rating: 4.9, reviews: 12, stock: true },
+  { id: 14, name: 'Ramo Aurora Boreal',          price: 55, img: PLACEHOLDER, cat: 'Mixtos',    rating: 4.8, reviews: 5,  stock: true },
 ]
 
 // ─── GIFTS ───────────────────────────────────────────────────────────────────
 export const gifts = [
-  { id: 101, name: 'Caja romántica rosa',      price: 75,  oldPrice: 95,  img: '🎁', desc: 'Rosas + chocolates + tarjeta personalizada' },
-  { id: 102, name: 'Combo flores + peluche',   price: 65,                 img: '🐻', desc: 'Ramo de 12 rosas con peluche mediano'        },
-  { id: 103, name: 'Desayuno sorpresa',        price: 85,                 img: '🎂', desc: 'Flores + chocolates + globo de cumpleaños'   },
-  { id: 104, name: 'Ramo + caja de chocolates',price: 90,  oldPrice: 110, img: '💝', desc: 'Ramo mixto + caja de bombones artesanales'   },
-  { id: 105, name: 'Kit aniversario deluxe',    price: 120,               img: '🌹', desc: 'Rosas rojas + champagne + tarjeta'           },
-  { id: 106, name: 'Sorpresa de cumpleaños',    price: 70,                img: '🎉', desc: 'Flores de temporada + globo + dulces'        },
+  { id: 101, name: 'Caja romántica rosa',      price: 75,  oldPrice: 95,  img: PLACEHOLDER, desc: 'Rosas + chocolates + tarjeta personalizada' },
+  { id: 102, name: 'Combo flores + peluche',   price: 65,                 img: PLACEHOLDER, desc: 'Ramo de 12 rosas con peluche mediano'        },
+  { id: 103, name: 'Desayuno sorpresa',        price: 85,                 img: PLACEHOLDER, desc: 'Flores + chocolates + globo de cumpleaños'   },
+  { id: 104, name: 'Ramo + caja de chocolates',price: 90,  oldPrice: 110, img: PLACEHOLDER, desc: 'Ramo mixto + caja de bombones artesanales'   },
+  { id: 105, name: 'Kit aniversario deluxe',    price: 120,               img: PLACEHOLDER, desc: 'Rosas rojas + champagne + tarjeta'           },
+  { id: 106, name: 'Sorpresa de cumpleaños',    price: 70,                img: PLACEHOLDER, desc: 'Flores de temporada + globo + dulces'        },
 ]
 
 // ─── PELUCHES ────────────────────────────────────────────────────────────────
 export const peluches = [
-  { id: 201, name: 'Osito de amor',        price: 25, size: 'Mediano', color: 'Café',      img: '🐻' },
-  { id: 202, name: 'Conejo blanco',        price: 18, size: 'Pequeño', color: 'Blanco',    img: '🐰' },
-  { id: 203, name: 'Oso gigante corazón',  price: 55, size: 'Gigante', color: 'Rosa',      img: '🧸' },
-  { id: 204, name: 'Perrito adorable',     price: 28, size: 'Mediano', color: 'Beige',     img: '🐶' },
-  { id: 205, name: 'Oso premium café',     price: 40, size: 'Grande',  color: 'Marrón',    img: '🐻' },
-  { id: 206, name: 'Unicornio mágico',     price: 32, size: 'Mediano', color: 'Arcoíris',  img: '🦄' },
+  { id: 201, name: 'Osito de amor',        price: 25, size: 'Mediano', color: 'Café',      img: PLACEHOLDER },
+  { id: 202, name: 'Conejo blanco',        price: 18, size: 'Pequeño', color: 'Blanco',    img: PLACEHOLDER },
+  { id: 203, name: 'Oso gigante corazón',  price: 55, size: 'Gigante', color: 'Rosa',      img: PLACEHOLDER },
+  { id: 204, name: 'Perrito adorable',     price: 28, size: 'Mediano', color: 'Beige',     img: PLACEHOLDER },
+  { id: 205, name: 'Oso premium café',     price: 40, size: 'Grande',  color: 'Marrón',    img: PLACEHOLDER },
+  { id: 206, name: 'Unicornio mágico',     price: 32, size: 'Mediano', color: 'Arcoíris',  img: PLACEHOLDER },
 ]
 
 // ─── CHOCOLATES (Tus datos originales adaptados con categorías para que funcione el filtro)
 export const chocolates = [
-  { id: 301, name: 'Caja de bombones belgas',  price: 35, desc: '24 piezas',   cat: 'Bombones', img: '🍫' },
-  { id: 302, name: 'Trufas de chocolate oscuro',price: 28, desc: '12 trufas',  cat: 'Trufas',   img: '🍫' },
-  { id: 303, name: 'Caja premium corazón',     price: 55, desc: '36 piezas',   cat: 'Caja premium', img: '❤️' },
-  { id: 304, name: 'Tableta artesanal rosa',   price: 22, desc: '100g',        cat: 'Artesanal', img: '🎀' },
-  { id: 305, name: 'Bombones de frutas',       price: 30, desc: '18 piezas',   cat: 'Bombones', img: '🍓' },
-  { id: 306, name: 'Trufas de champagne',      price: 40, desc: '16 trufas',   cat: 'Trufas',   img: '🥂' },
+  { id: 301, name: 'Caja de bombones belgas',  price: 35, desc: '24 piezas',   cat: 'Bombones', img: PLACEHOLDER },
+  { id: 302, name: 'Trufas de chocolate oscuro',price: 28, desc: '12 trufas',  cat: 'Trufas',   img: PLACEHOLDER },
+  { id: 303, name: 'Caja premium corazón',     price: 55, desc: '36 piezas',   cat: 'Caja premium', img: PLACEHOLDER },
+  { id: 304, name: 'Tableta artesanal rosa',   price: 22, desc: '100g',        cat: 'Artesanal', img: PLACEHOLDER },
+  { id: 305, name: 'Bombones de frutas',       price: 30, desc: '18 piezas',   cat: 'Bombones', img: PLACEHOLDER },
+  { id: 306, name: 'Trufas de champagne',      price: 40, desc: '16 trufas',   cat: 'Trufas',   img: PLACEHOLDER },
 ]
 
 // ─── ORDERS ──────────────────────────────────────────────────────────────────
 export const orders = [
-  { id: '#FLO12345', date: '12 May 2025', product: 'Ramo de rosas rojas',       status: 'Completado', total: 45.00, address: 'Av. Siempre Viva 123, CDMX', img: '🌹' },
-  { id: '#FLO12344', date: '10 May 2025', product: 'Caja de rosas + Peluche',   status: 'Pendiente',  total: 55.00, address: 'Av. Siempre Viva 123, CDMX', img: '🎁' },
-  { id: '#FLO12343', date: '8 May 2025',  product: 'Ramo mixto grande',         status: 'Retrasado',  total: 65.00, address: 'Av. Siempre Viva 123, CDMX', img: '💐' },
-  { id: '#FLO12342', date: '5 May 2025',  product: 'Girasoles + Chocolates',     status: 'Cancelado',  total: 35.00, address: 'Av. Siempre Viva 123, CDMX', img: '🌻' },
-  { id: '#FLO12341', date: '1 May 2025',  product: 'Orquídeas blancas',          status: 'Completado', total: 65.00, address: 'Av. Siempre Viva 123, CDMX', img: '🌺' },
-  { id: '#FLO12340', date: '28 Apr 2025', product: 'Bouquet romántico deluxe',   status: 'Completado', total: 75.00, address: 'Av. Siempre Viva 123, CDMX', img: '💐' },
+  { id: '#FLO12345', date: '12 May 2025', product: 'Ramo de rosas rojas',       status: 'Completado', total: 45.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
+  { id: '#FLO12344', date: '10 May 2025', product: 'Caja de rosas + Peluche',   status: 'Pendiente',  total: 55.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
+  { id: '#FLO12343', date: '8 May 2025',  product: 'Ramo mixto grande',         status: 'Retrasado',  total: 65.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
+  { id: '#FLO12342', date: '5 May 2025',  product: 'Girasoles + Chocolates',     status: 'Cancelado',  total: 35.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
+  { id: '#FLO12341', date: '1 May 2025',  product: 'Orquídeas blancas',          status: 'Completado', total: 65.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
+  { id: '#FLO12340', date: '28 Apr 2025', product: 'Bouquet romántico deluxe',   status: 'Completado', total: 75.00, address: 'Av. Siempre Viva 123, CDMX', img: PLACEHOLDER },
 ]
 
 // ─── REVIEWS ─────────────────────────────────────────────────────────────────
@@ -67,8 +69,8 @@ export const reviews = [
 
 // ─── COUPONS ─────────────────────────────────────────────────────────────────
 export const coupons = [
-  { id: 1, discount: '-10%', title: '10% de descuento',    desc: 'Descuento en tu próxima compra de flores',  min: 'Mínimo: $40.00', vence: '31 May 2025', code: 'DESCUENTO10',  status: 'Activo',   bg: '#FF4DB8' },
-  { id: 2, discount: 'Free', title: 'Envío gratis',        desc: 'Sin costo de envío en cualquier pedido',    min: 'Mínimo: $50.00', vence: '15 Jun 2025', code: 'ENVIOGRATIS',  status: 'Activo',   bg: '#A855F7' },
+  { id: 1, discount: '-10%', title: '10% de descuento',    desc: 'Descuento en tu próxima compra de flores',  min: 'Mínimo: $40.00', vence: '31 May 2025', code: 'DESCUENTO10',  status: 'Activo',   bg: '#d0439d' },
+  { id: 2, discount: 'Free', title: 'Envío gratis',        desc: 'Sin costo de envío en cualquier pedido',    min: 'Mínimo: $50.00', vence: '15 Jun 2025', code: 'ENVIOGRATIS',  status: 'Activo',   bg: '#9f54a0' },
   { id: 3, discount: '-20%', title: 'Bienvenida -20%',     desc: 'Cupón de bienvenida para nuevos clientes',  min: 'Mínimo: $60.00', vence: 'Expirado',    code: 'BIENVENIDA20', status: 'Expirado', bg: '#9ca3af' },
   { id: 4, discount: '-15%', title: '-15% en flores',      desc: 'Descuento en toda la sección de flores',    min: 'Mínimo: $35.00', vence: '30 Jun 2025', code: 'FLORES15',     status: 'Activo',   bg: '#F59E0B' },
 ]

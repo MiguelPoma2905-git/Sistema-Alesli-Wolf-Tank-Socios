@@ -10,9 +10,9 @@ const ROLE_LABELS = {
 }
 
 const ROLE_BADGES = {
-  admin: 'bg-purple-500',
-  'encargad@': 'bg-blue-500',
-  cliente: 'bg-green-500',
+  admin: 'bg-secondary',
+  'encargad@': 'bg-blue-accent',
+  cliente: 'bg-primary',
 }
 
 export function AppProvider({ children }) {

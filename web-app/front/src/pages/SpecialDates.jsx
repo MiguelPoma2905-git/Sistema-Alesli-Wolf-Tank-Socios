@@ -121,7 +121,7 @@ export default function SpecialDates() {
                   <div key={date.id} className="border border-gray-100 dark:border-white/5 rounded-2xl p-5 hover:border-primary/50 transition-all group relative">
                     <div className="flex items-start justify-between mb-4">
                       <span className={`text-[10px] font-black uppercase tracking-widest px-2.5 py-1 rounded-lg ${getTypeStyle(date.type)}`}>
-                        {date.type === 'Aniversario' ? '💍 ' : date.type === 'Cumpleaños' ? '🎂 ' : '✨ '} {date.type}
+{date.type}
                       </span>
                       <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                         <button onClick={() => openModal(date)} className="p-2 text-gray-400 hover:text-primary"><Edit2 size={14}/></button>
