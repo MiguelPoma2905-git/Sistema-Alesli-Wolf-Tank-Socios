@@ -3,6 +3,7 @@ import { AppProvider } from './context/AppContext'
 import { ToastProvider } from './context/ToastContext'
 
 import Layout from './components/layouts/Layout'
+import ProtectedRoute from './components/shared/ProtectedRoute'
 
 import Dashboard from './pages/Dashboard'
 import { Flores, DetalleProducto, Regalos, Peluches, Chocolate, Ocasiones } from './pages/CatalogPages'
@@ -34,16 +35,18 @@ export default function App() {
               <Route path="peluches" element={<Peluches />} />
               <Route path="chocolates" element={<Chocolate />} />
               <Route path="ocasiones" element={<Ocasiones />} />
-              <Route path="carrito" element={<Cart />} />
-              <Route path="checkout" element={<Checkout />} />
-              <Route path="order-confirmation" element={<OrderConfirmation />} />
-              <Route path="pedidos" element={<Orders />} />
-              <Route path="pedido/:id" element={<OrderDetail />} />
-              <Route path="perfil" element={<Profile />} />
-              <Route path="fechas" element={<SpecialDates />} />
-              <Route path="recompensas" element={<Rewards />} />
-              <Route path="personalizar" element={<CustomGift />} />
-              <Route path="admin/dashboard" element={<AdminDashboard />} />
+
+              <Route path="carrito" element={<ProtectedRoute roles={['cliente']}><Cart /></ProtectedRoute>} />
+              <Route path="checkout" element={<ProtectedRoute roles={['cliente']}><Checkout /></ProtectedRoute>} />
+              <Route path="order-confirmation" element={<ProtectedRoute roles={['cliente']}><OrderConfirmation /></ProtectedRoute>} />
+
+              <Route path="pedidos" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+              <Route path="pedido/:id" element={<ProtectedRoute><OrderDetail /></ProtectedRoute>} />
+              <Route path="perfil" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="fechas" element={<ProtectedRoute roles={['cliente']}><SpecialDates /></ProtectedRoute>} />
+              <Route path="recompensas" element={<ProtectedRoute roles={['cliente']}><Rewards /></ProtectedRoute>} />
+              <Route path="personalizar" element={<ProtectedRoute><CustomGift /></ProtectedRoute>} />
+              <Route path="admin/dashboard" element={<ProtectedRoute roles={['admin']}><AdminDashboard /></ProtectedRoute>} />
               <Route path="*" element={
                 <div className="py-20 text-center transition-colors duration-500">
                   <h1 className="text-[40px] font-black text-primary">404</h1>

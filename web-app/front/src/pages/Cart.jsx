@@ -1,13 +1,39 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Trash2, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, Plus, Truck, Info, Ticket, Edit3, MessageCircle } from 'lucide-react'
+import { Trash2, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, Plus, Truck, Info, Ticket, Edit3, MessageCircle, Ban } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { formatPrice } from '../utils/helpers'
-import { flowers, chocolates, peluches, gifts } from '../data/mockData' 
+import { getProducts } from '../services/productos'
 
 export default function Cart() {
-  const { cart, updateQty, removeFromCart, addToCart, cartTotal } = useApp()
+  const { cart, updateQty, removeFromCart, addToCart, cartTotal, isAuth, isAdmin, isEncargado } = useApp()
   const navigate = useNavigate()
+
+  const [allProducts, setAllProducts] = useState([])
+
+  useEffect(() => {
+    getProducts()
+      .then(data => setAllProducts(Array.isArray(data) ? data : []))
+      .catch(() => setAllProducts([]))
+  }, [])
+
+  if (isAdmin || isEncargado) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 animate-fade-in">
+        <div className="w-20 h-20 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mb-6">
+          <Ban size={36} />
+        </div>
+        <h2 className="text-[28px] font-black text-text-dark dark:text-white mb-3 text-center">Acción no permitida</h2>
+        <p className="text-[14px] text-text-muted text-center max-w-md leading-relaxed">
+          Tu rol de <strong>{isAdmin ? 'Administrador' : 'Encargado'}</strong> no permite realizar compras o pedidos.
+          Solo los <strong>Clientes</strong> pueden acceder al carrito y generar pedidos.
+        </p>
+        <button onClick={() => navigate('/')} className="mt-8 px-8 py-3 bg-primary text-white text-[12px] font-bold uppercase tracking-wider hover:bg-accent transition-all shadow-md">
+          Volver al inicio
+        </button>
+      </div>
+    )
+  }
 
   const [discountCode, setDiscountCode] = useState('')
   const [orderNotes, setOrderNotes] = useState('')
@@ -42,20 +68,29 @@ export default function Cart() {
   }
 
   // ─── MOTOR DE RECOMENDACIÓN DINÁMICO ───
-  const hasFlowers = cart.some(item => flowers.some(f => f.id === item.id))
-  const hasPeluches = cart.some(item => peluches.some(p => p.id === item.id))
+  const mappedAll = allProducts.map(p => ({
+    id: p.id_producto,
+    name: p.nombre,
+    price: parseFloat(p.precio_venta),
+    img: p.imagen_url || '/images/placeholder_product.jpg',
+    cat: p.categoria_nombre || 'General',
+    desc: p.descripcion || '',
+  }))
+
+  const hasFlowers = cart.some(item => mappedAll.filter(p => p.cat !== 'Peluches').some(f => f.id === item.id))
+  const hasPeluches = cart.some(item => mappedAll.filter(p => p.cat === 'Peluches').some(p => p.id === item.id))
   
   let suggestionPool = []
   let suggestionTitle = "Completa tu sorpresa"
 
   if (hasFlowers && !hasPeluches) {
-    suggestionPool = [...peluches, ...chocolates]
+    suggestionPool = mappedAll.filter(p => p.cat === 'Peluches').concat(mappedAll.filter(p => p.cat === 'Chocolates'))
     suggestionTitle = "El complemento perfecto para tus flores"
   } else if (hasPeluches && !hasFlowers) {
-    suggestionPool = [...flowers, ...chocolates]
+    suggestionPool = mappedAll.filter(p => p.cat !== 'Peluches')
     suggestionTitle = "Añade unas flores a tu peluche"
   } else {
-    suggestionPool = [...chocolates, ...peluches, ...gifts] 
+    suggestionPool = mappedAll.filter(p => ['Chocolates', 'Peluches', 'Regalos'].includes(p.cat))
   }
 
   const isCartLarge = cart.length >= 4;
@@ -179,7 +214,7 @@ export default function Cart() {
                 {lastMinuteAddons.map((item, idx) => (
                   <div key={item.id} className="bg-white dark:bg-white/5 rounded-[24px] p-5 flex flex-col items-center text-center shadow-sm hover:shadow-card-md transition-all duration-300 hover:-translate-y-2 border border-transparent hover:border-primary/20 group animate-fade-in-up" style={{ animationDelay: `${(idx + 3) * 100}ms` }}>
                     <div className="absolute top-2 right-2 bg-primary/10 text-primary text-[10px] font-black px-2 py-1 rounded-lg">Ideal</div>
-                    <div className="text-[48px] mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 drop-shadow-sm">{item.img}</div>
+                    <div className="w-16 h-16 mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 drop-shadow-sm overflow-hidden rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 dark:from-white/5 dark:to-transparent"><img src={item.img} alt={item.name} className="w-full h-full object-contain" /></div>
                     <h4 className="text-[12px] font-bold text-text-dark dark:text-white h-[36px] line-clamp-2 mb-1">{item.name}</h4>
                     <span className="text-[15px] font-black text-primary mb-4">{formatPrice(item.price)}</span>
                     <button 

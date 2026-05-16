@@ -5,9 +5,9 @@ import {
   Users, ShoppingBag, Layers, DollarSign, Package,
   ArrowRight, TrendingUp, Plus, Edit, Trash2,
   BarChart3, Settings, UserPlus, AlertCircle,
-  CheckCircle, Clock, X
+  CheckCircle, Clock, X, Image as ImageIcon, Upload
 } from 'lucide-react'
-import { getProducts, createProduct, updateProduct, deleteProduct } from '../services/productos'
+import { getProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../services/productos'
 import { getOrders, updateOrder } from '../services/pedidos'
 import { getClients } from '../services/clientes'
 import { getSuppliers } from '../services/proveedores'
@@ -38,7 +38,10 @@ export default function AdminDashboard() {
 
   const [showProductModal, setShowProductModal] = useState(false)
   const [editingProduct, setEditingProduct] = useState(null)
-  const [productForm, setProductForm] = useState({ nombre: '', precio: '', stock: '', categoria: '' })
+  const [productForm, setProductForm] = useState({ nombre: '', precio: '', id_categoria: '', imagen: '' })
+  const [imagenPreview, setImagenPreview] = useState(null)
+  const [imagenSource, setImagenSource] = useState('file')
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     if (!isAdmin) {
@@ -46,11 +49,13 @@ export default function AdminDashboard() {
       return
     }
     async function load() {
-      const [products, orders, clients, suppliers] = await Promise.all([
+      setLoading(true)
+      const [products, orders, clients, suppliers, cats] = await Promise.all([
         getProducts().catch(() => []),
         getOrders().catch(() => []),
         getClients().catch(() => []),
         getSuppliers().catch(() => []),
+        getCategories().catch(() => []),
       ])
       setData({
         products: Array.isArray(products) ? products : [],
@@ -58,6 +63,7 @@ export default function AdminDashboard() {
         clients: Array.isArray(clients) ? clients : [],
         suppliers: Array.isArray(suppliers) ? suppliers : [],
       })
+      setCategories(Array.isArray(cats) ? cats : [])
       setLoading(false)
     }
     load()
@@ -67,18 +73,32 @@ export default function AdminDashboard() {
 
   const handleSaveProduct = async () => {
     try {
+      const codigo = editingProduct
+        ? editingProduct.codigo
+        : `PROD-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`
+      const payload = {
+        codigo,
+        nombre: productForm.nombre,
+        precio_venta: productForm.precio,
+        id_categoria: productForm.id_categoria ? Number(productForm.id_categoria) : null,
+        imagen_url: productForm.imagen || null,
+        activo: true,
+      }
       if (editingProduct) {
-        await updateProduct(editingProduct.id, productForm)
+        await updateProduct(editingProduct.id_producto, payload)
       } else {
-        await createProduct(productForm)
+        await createProduct(payload)
       }
       setShowProductModal(false)
       setEditingProduct(null)
-      setProductForm({ nombre: '', precio: '', stock: '', categoria: '' })
+      setProductForm({ nombre: '', precio: '', id_categoria: '', imagen: '' })
+      setImagenPreview(null)
+      setImagenSource('file')
       const products = await getProducts().catch(() => [])
       setData(prev => ({ ...prev, products: Array.isArray(products) ? products : [] }))
     } catch (err) {
-      alert('Error al guardar producto')
+      console.error('Error guardando producto:', err?.response?.data || err)
+      alert(err?.response?.data?.codigo?.[0] || 'Error al guardar producto')
     }
   }
 
@@ -86,7 +106,7 @@ export default function AdminDashboard() {
     if (!confirm('¿Eliminar este producto?')) return
     try {
       await deleteProduct(id)
-      setData(prev => ({ ...prev, products: prev.products.filter(p => p.id !== id) }))
+      setData(prev => ({ ...prev, products: prev.products.filter(p => p.id_producto !== id) }))
     } catch {
       alert('Error al eliminar producto')
     }
@@ -94,12 +114,15 @@ export default function AdminDashboard() {
 
   const openEditProduct = (product) => {
     setEditingProduct(product)
+    const img = product.imagen || product.imagen_url || ''
     setProductForm({
       nombre: product.nombre || '',
-      precio: product.precio || '',
-      stock: product.stock || '',
-      categoria: product.categoria || product.categoria_nombre || '',
+      precio: product.precio_venta || '',
+      id_categoria: product.id_categoria || '',
+      imagen: img,
     })
+    setImagenPreview(img || null)
+    setImagenSource(img.startsWith('data:') ? 'file' : 'url')
     setShowProductModal(true)
   }
 
@@ -225,7 +248,7 @@ export default function AdminDashboard() {
           <div>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-[18px] font-black text-text-dark dark:text-white">Gestión de Productos</h2>
-              <button onClick={() => { setEditingProduct(null); setProductForm({ nombre: '', precio: '', stock: '', categoria: '' }); setShowProductModal(true) }} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-black text-[12px] uppercase tracking-wide hover:bg-secondary transition-all shadow-md">
+              <button onClick={() => { setEditingProduct(null); setProductForm({ nombre: '', precio: '', id_categoria: '', imagen: '' }); setImagenPreview(null); setImagenSource('file'); setShowProductModal(true) }} className="flex items-center gap-2 px-5 py-2.5 bg-primary text-white rounded-xl font-black text-[12px] uppercase tracking-wide hover:bg-secondary transition-all shadow-md">
                 <Plus size={16} /> Nuevo Producto
               </button>
             </div>
@@ -235,7 +258,7 @@ export default function AdminDashboard() {
                 <Layers size={40} className="mx-auto text-text-muted/30 mb-4" />
                 <p className="text-[16px] font-bold text-text-dark dark:text-white mb-2">No hay productos</p>
                 <p className="text-[13px] text-text-muted mb-6">Crea tu primer producto en el catálogo</p>
-                <button onClick={() => { setEditingProduct(null); setProductForm({ nombre: '', precio: '', stock: '', categoria: '' }); setShowProductModal(true) }} className="px-6 py-3 bg-primary text-white rounded-xl font-black text-[12px] uppercase tracking-widest hover:bg-secondary transition-all shadow-md inline-flex items-center gap-2">
+                <button onClick={() => { setEditingProduct(null); setProductForm({ nombre: '', precio: '', id_categoria: '', imagen: '' }); setImagenPreview(null); setImagenSource('file'); setShowProductModal(true) }} className="px-6 py-3 bg-primary text-white rounded-xl font-black text-[12px] uppercase tracking-widest hover:bg-secondary transition-all shadow-md inline-flex items-center gap-2">
                   <Plus size={16} /> Crear Producto
                 </button>
               </div>
@@ -254,19 +277,19 @@ export default function AdminDashboard() {
                     </thead>
                     <tbody>
                       {data.products.map((p, i) => (
-                        <tr key={p.id || i} className="border-b border-gray-50 dark:border-white/5 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
-                          <td className="p-4 text-[13px] font-bold text-text-dark dark:text-white">{p.nombre || p.name}</td>
-                          <td className="p-4 text-[13px] text-text-muted">Bs. {p.precio || p.price || '0.00'}</td>
+                        <tr key={p.id_producto || i} className="border-b border-gray-50 dark:border-white/5 last:border-0 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+                          <td className="p-4 text-[13px] font-bold text-text-dark dark:text-white">{p.nombre}</td>
+                          <td className="p-4 text-[13px] text-text-muted">Bs. {p.precio_venta || '0.00'}</td>
                           <td className="p-4">
-                            <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-bold ${(parseInt(p.stock) || 0) > 10 ? 'text-green-500 bg-green-50 dark:bg-green-500/10' : (parseInt(p.stock) || 0) > 0 ? 'text-yellow-500 bg-yellow-50 dark:bg-yellow-500/10' : 'text-red-500 bg-red-50 dark:bg-red-500/10'}`}>
-                              {p.stock || 0} uds.
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-[11px] font-bold ${p.activo ? 'text-green-500 bg-green-50 dark:bg-green-500/10' : 'text-red-500 bg-red-50 dark:bg-red-500/10'}`}>
+                              {p.activo ? 'Disponible' : 'Inactivo'}
                             </span>
                           </td>
-                          <td className="p-4 text-[12px] text-text-muted">{p.categoria_nombre || p.categoria || 'Sin categoría'}</td>
+                          <td className="p-4 text-[12px] text-text-muted">{p.categoria_nombre || 'Sin categoría'}</td>
                           <td className="p-4">
                             <div className="flex items-center gap-2">
                               <button onClick={() => openEditProduct(p)} className="p-2 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-500/10 text-blue-500 transition-colors"><Edit size={15} /></button>
-                              <button onClick={() => handleDeleteProduct(p.id)} className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-500 transition-colors"><Trash2 size={15} /></button>
+                              <button onClick={() => handleDeleteProduct(p.id_producto)} className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-500/10 text-red-500 transition-colors"><Trash2 size={15} /></button>
                             </div>
                           </td>
                         </tr>
@@ -374,6 +397,66 @@ export default function AdminDashboard() {
             </h3>
             <div className="space-y-4">
               <div>
+                <label className="text-[11px] font-black text-text-muted uppercase tracking-widest block mb-2">Imagen del producto</label>
+                <div className="flex gap-2 mb-3">
+                  <button onClick={() => setImagenSource('file')} className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-all ${imagenSource === 'file' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-white/5 text-text-muted'}`}>Subir archivo</button>
+                  <button onClick={() => setImagenSource('url')} className={`flex-1 py-2 text-[11px] font-bold uppercase tracking-wider rounded-lg transition-all ${imagenSource === 'url' ? 'bg-primary text-white' : 'bg-gray-100 dark:bg-white/5 text-text-muted'}`}>URL externa</button>
+                </div>
+
+                {imagenSource === 'file' ? (
+                  <>
+                    <div className="flex items-center gap-4">
+                      <label className="flex-1 flex items-center gap-3 px-4 py-3 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl cursor-pointer hover:border-primary transition-all">
+                        <Upload size={18} className="text-text-muted" />
+                        <span className="text-[13px] font-bold text-text-muted">Subir imagen (JPG/PNG)</span>
+                        <input type="file" accept="image/jpeg,image/png,image/jpg" className="hidden" onChange={e => {
+                          const file = e.target.files[0]
+                          if (!file) return
+                          const reader = new FileReader()
+                          reader.onload = (ev) => {
+                            setProductForm({...productForm, imagen: ev.target.result})
+                            setImagenPreview(ev.target.result)
+                          }
+                          reader.readAsDataURL(file)
+                        }} />
+                      </label>
+                      {imagenPreview && (
+                        <button onClick={() => { setProductForm({...productForm, imagen: ''}); setImagenPreview(null) }} className="text-[11px] font-bold text-red-500 hover:text-red-700 transition-colors">Quitar</button>
+                      )}
+                    </div>
+                    {imagenPreview ? (
+                      <div className="mt-3 relative rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+                        <img src={imagenPreview} alt="Preview" className="w-full h-[200px] object-contain bg-gray-50 dark:bg-black/20" />
+                      </div>
+                    ) : (
+                      <div className="mt-3 w-full h-[120px] bg-gray-50 dark:bg-white/5 border border-dashed border-gray-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center text-text-muted">
+                        <ImageIcon size={28} className="mb-1 opacity-50" />
+                        <span className="text-[11px] font-bold">600 × 700 px — Subí o pegá URL</span>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-4">
+                      <input type="text" value={productForm.imagen} onChange={e => { setProductForm({...productForm, imagen: e.target.value}); setImagenPreview(e.target.value || null) }} placeholder="https://res.cloudinary.com/.../imagen.jpg" className="flex-1 bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-[13px] font-bold outline-none focus:border-primary transition-all" />
+                      {productForm.imagen && (
+                        <button onClick={() => { setProductForm({...productForm, imagen: ''}); setImagenPreview(null) }} className="text-[11px] font-bold text-red-500 hover:text-red-700 transition-colors">Quitar</button>
+                      )}
+                    </div>
+                    {imagenPreview ? (
+                      <div className="mt-3 relative rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+                        <img src={imagenPreview} alt="Preview" className="w-full h-[200px] object-contain bg-gray-50 dark:bg-black/20" onError={e => { e.target.style.display = 'none' }} />
+                      </div>
+                    ) : (
+                      <div className="mt-3 w-full h-[120px] bg-gray-50 dark:bg-white/5 border border-dashed border-gray-200 dark:border-white/10 rounded-xl flex flex-col items-center justify-center text-text-muted">
+                        <ImageIcon size={28} className="mb-1 opacity-50" />
+                        <span className="text-[11px] font-bold">Pegá la URL de Cloudinary u otro servicio</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+              <div>
                 <label className="text-[11px] font-black text-text-muted uppercase tracking-widest block mb-2">Nombre</label>
                 <input type="text" value={productForm.nombre} onChange={e => setProductForm({...productForm, nombre: e.target.value})} className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-[14px] font-bold outline-none focus:border-primary transition-all" />
               </div>
@@ -389,7 +472,12 @@ export default function AdminDashboard() {
               </div>
               <div>
                 <label className="text-[11px] font-black text-text-muted uppercase tracking-widest block mb-2">Categoría</label>
-                <input type="text" value={productForm.categoria} onChange={e => setProductForm({...productForm, categoria: e.target.value})} className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-[14px] font-bold outline-none focus:border-primary transition-all" />
+                <select value={productForm.id_categoria} onChange={e => setProductForm({...productForm, id_categoria: e.target.value})} className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-[14px] font-bold outline-none focus:border-primary transition-all appearance-none cursor-pointer">
+                  <option value="">Seleccioná una categoría</option>
+                  {categories.map(cat => (
+                    <option key={cat.id_categoria} value={cat.id_categoria}>{cat.nombre}</option>
+                  ))}
+                </select>
               </div>
               <button onClick={handleSaveProduct} className="w-full mt-4 bg-primary text-white py-3.5 rounded-xl font-black text-[13px] uppercase tracking-widest hover:bg-secondary transition-all shadow-md">
                 {editingProduct ? 'Actualizar Producto' : 'Crear Producto'}

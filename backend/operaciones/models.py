@@ -64,12 +64,12 @@ class Producto(models.Model):
     """
     id_producto = models.AutoField(primary_key=True)
     id_categoria = models.ForeignKey(Categoria, on_delete=models.SET_NULL, blank=True, null=True, db_column='id_categoria')
-    codigo = models.CharField(max_length=20, unique=True)
+    codigo = models.CharField(max_length=50, unique=True)
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField(blank=True, null=True)
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2)
     costo_estimado = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    imagen_url = models.CharField(max_length=255, blank=True, null=True)
+    imagen_url = models.TextField(blank=True, null=True)
     activo = models.BooleanField(default=True)
 
     class Meta:

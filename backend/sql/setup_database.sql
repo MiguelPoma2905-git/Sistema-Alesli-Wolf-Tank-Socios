@@ -72,12 +72,12 @@ CREATE TABLE IF NOT EXISTS public.materiales (
 CREATE TABLE IF NOT EXISTS public.productos (
     id_producto integer NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     id_categoria integer REFERENCES public.categorias(id_categoria) ON DELETE SET NULL,
-    codigo character varying(20) NOT NULL UNIQUE,
+    codigo character varying(50) NOT NULL UNIQUE,
     nombre character varying(150) NOT NULL,
     descripcion text,
     precio_venta numeric(10,2) NOT NULL,
     costo_estimado numeric(10,2),
-    imagen_url character varying(255),
+    imagen_url text,
     activo boolean DEFAULT true
 );
 

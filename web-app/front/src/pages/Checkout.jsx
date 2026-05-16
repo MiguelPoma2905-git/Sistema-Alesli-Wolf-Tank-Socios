@@ -1,12 +1,30 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, CreditCard, Wallet, QrCode, Banknote, ShieldCheck, Map, Check, CheckCircle2, Ticket, Sparkles, UserX } from 'lucide-react'
+import { ArrowLeft, CreditCard, Wallet, QrCode, Banknote, ShieldCheck, Map, Check, CheckCircle2, Ticket, Sparkles, UserX, Ban } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { formatPrice } from '../utils/helpers'
 
 export default function Checkout() {
-  const { cart, cartTotal, clearCart } = useApp()
+  const { cart, cartTotal, clearCart, isAdmin, isEncargado } = useApp()
   const navigate = useNavigate()
+
+  if (isAdmin || isEncargado) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 animate-fade-in">
+        <div className="w-20 h-20 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mb-6">
+          <Ban size={36} />
+        </div>
+        <h2 className="text-[28px] font-black text-text-dark dark:text-white mb-3 text-center">Acción no permitida</h2>
+        <p className="text-[14px] text-text-muted text-center max-w-md leading-relaxed">
+          Tu rol de <strong>{isAdmin ? 'Administrador' : 'Encargado'}</strong> no permite realizar compras o pedidos.
+          Solo los <strong>Clientes</strong> pueden acceder al checkout y generar pedidos.
+        </p>
+        <button onClick={() => navigate('/')} className="mt-8 px-8 py-3 bg-primary text-white text-[12px] font-bold uppercase tracking-wider hover:bg-accent transition-all shadow-md">
+          Volver al inicio
+        </button>
+      </div>
+    )
+  }
   
   const [activeStep, setActiveStep] = useState(1)
   

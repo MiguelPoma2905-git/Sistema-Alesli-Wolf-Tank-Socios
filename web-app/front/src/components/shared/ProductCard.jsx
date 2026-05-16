@@ -1,12 +1,14 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Heart, ShoppingCart } from 'lucide-react'
+import { Heart, ShoppingCart, LogIn, X } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
 import Rating from '../ui/Rating'
 import { formatPrice } from '../../utils/helpers'
 
 export default function ProductCard({ product }) {
-  const { addToCart, toggleFav, isFav } = useApp()
+  const { addToCart, toggleFav, isFav, isAuth, isCliente } = useApp()
   const navigate = useNavigate()
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
   
   if (!product) return null;
 
@@ -17,20 +19,21 @@ export default function ProductCard({ product }) {
   const hasStock = product.stock !== false 
 
   return (
-    <div className="group bg-white dark:bg-[#1a1a2e] rounded-[32px] p-4 shadow-sm hover:shadow-card-lg transition-all duration-300 border border-pink-light/30 dark:border-white/5 flex flex-col h-full w-full relative">
+    <div className="group bg-white dark:bg-[#1a1a2e] rounded-2xl p-4 shadow-[0_1px_3px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] dark:hover:shadow-[0_8px_30px_rgba(0,0,0,0.3)] hover:-translate-y-1.5 transition-all duration-500 ease-out border border-gray-200/40 dark:border-white/8 hover:border-primary/20 flex flex-col h-full w-full relative">
       
       <button 
         onClick={(e) => { e.stopPropagation(); toggleFav(product.id); }}
-        className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-white/80 dark:bg-black/20 backdrop-blur-sm flex items-center justify-center text-text-muted hover:text-primary transition-colors"
+        className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full bg-white/80 dark:bg-black/20 backdrop-blur-sm flex items-center justify-center text-text-muted hover:text-primary hover:scale-110 transition-all duration-300"
       >
-        <Heart size={18} className={isFavorite ? "fill-primary text-primary" : ""} />
+        <Heart size={18} className={`transition-all duration-300 ${isFavorite ? "fill-primary text-primary scale-110" : ""}`} />
       </button>
 
       <div 
         onClick={() => navigate(`/flores/${product.id}`)}
-        className="w-full aspect-square shrink-0 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-white/5 dark:to-transparent rounded-[24px] flex items-center justify-center cursor-pointer relative overflow-hidden"
+        className="w-full aspect-square shrink-0 bg-gradient-to-br from-pink-50 to-pink-100 dark:from-white/5 dark:to-transparent rounded-xl flex items-center justify-center cursor-pointer relative overflow-hidden group/img"
       >
-        <img src={product.img || '/images/placeholder_product.jpg'} alt={product.name} className="w-full h-full object-contain transition-transform duration-500 drop-shadow-md group-hover:scale-110" />
+        <img src={product.img || '/images/placeholder_product.jpg'} alt={product.name} className="w-full h-full object-contain transition-all duration-700 drop-shadow-md group-hover:scale-110 group-hover:rotate-[1deg]" />
+        <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
         {!hasStock && (
           <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] flex items-center justify-center">
@@ -64,7 +67,7 @@ export default function ProductCard({ product }) {
         <div className="flex-1"></div>
         
         {/* ZONA DE COMPRA: Alto fijo: 50px */}
-        <div className="flex items-end justify-between border-t border-pink-light/30 dark:border-white/5 pt-2 h-[50px] shrink-0 mt-3">
+        <div className="flex items-end justify-between border-t border-gray-200/30 dark:border-white/8 pt-2 h-[50px] shrink-0 mt-3">
           <div className="flex flex-col justify-end h-full">
             {/* Espacio fijo para Precio Antiguo: Evita saltos si no existe */}
             <div className="h-[14px]">
@@ -81,12 +84,32 @@ export default function ProductCard({ product }) {
           
           <button 
             disabled={!hasStock}
-            onClick={(e) => { e.stopPropagation(); addToCart(product); }}
+            onClick={(e) => {
+              e.stopPropagation()
+              if (!isAuth) { setShowLoginPrompt(true); return }
+              if (!isCliente) { return }
+              addToCart(product)
+            }}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${hasStock ? 'bg-bg-light dark:bg-white/5 text-text-dark dark:text-white hover:bg-primary hover:text-white shadow-sm' : 'bg-gray-100 dark:bg-white/5 text-gray-400 cursor-not-allowed'}`}
           >
             <ShoppingCart size={16} />
           </button>
         </div>
+
+      {showLoginPrompt && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" onClick={() => setShowLoginPrompt(false)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="bg-white dark:bg-[#151522] w-full max-w-sm shadow-xl border border-border-light/30 dark:border-white/10 relative z-10 p-8" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowLoginPrompt(false)} className="absolute top-4 right-4 text-text-muted hover:text-text-dark dark:hover:text-white transition-colors"><X size={18} /></button>
+            <div className="text-center">
+              <div className="w-14 h-14 bg-primary/10 flex items-center justify-center mx-auto mb-5"><LogIn size={24} className="text-primary" /></div>
+              <h3 className="text-[20px] font-heading font-bold text-text-dark dark:text-white mb-2">Inicia sesión</h3>
+              <p className="text-[13px] text-text-muted mb-6 leading-relaxed">Necesitás estar registrado como cliente para comprar. Ingresá o creá tu cuenta.</p>
+              <button onClick={() => { setShowLoginPrompt(false); navigate('/login') }} className="w-full py-3 bg-primary text-white text-[12px] font-bold uppercase tracking-wider hover:bg-accent transition-all">Iniciar sesión</button>
+            </div>
+          </div>
+        </div>
+      )}
 
       </div>
     </div>

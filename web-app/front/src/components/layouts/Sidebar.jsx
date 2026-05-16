@@ -1,16 +1,27 @@
 import { NavLink } from 'react-router-dom'
 import { SIDEBAR_ITEMS } from '../../utils/constants'
 import * as Icons from 'lucide-react'
+import { useApp } from '../../context/AppContext'
 
-// Grupos actualizados según tus requerimientos
 const MENU_GROUPS = [
-  { title: 'Catálogo', items: ['inicio', 'flores', 'regalos', 'peluches', 'chocolates'] },
-  { title: 'Experiencias', items: ['ocasiones', 'personalizar'] }, // Cursos eliminado
-  { title: 'Mi Cuenta', items: ['pedidos', 'beneficios', 'favoritos'] }, // Beneficios engloba cupones/recompensas
-  { title: 'Soporte', items: ['contacto'] }
+  { title: 'Catálogo', items: ['inicio', 'flores', 'regalos', 'peluches', 'chocolates'], roles: null },
+  { title: 'Experiencias', items: ['ocasiones', 'personalizar'], roles: null },
+  { title: 'Mi Cuenta', items: ['pedidos', 'beneficios', 'favoritos'], roles: ['cliente'] },
+  { title: 'Soporte', items: ['contacto'], roles: null },
 ]
 
 export default function Sidebar({ isOpen }) {
+  const { isAuth, isCliente } = useApp()
+
+  const filteredGroups = MENU_GROUPS.filter(group => {
+    if (!group.roles) return true
+    if (!isAuth) return false
+    return group.roles.some(r => {
+      if (r === 'cliente') return isCliente
+      return false
+    })
+  })
+
   return (
     <aside className={`
       sticky top-0 z-[100] h-screen bg-white dark:bg-[#131320] border-r border-pink-light dark:border-white/5 
@@ -19,9 +30,8 @@ export default function Sidebar({ isOpen }) {
       overflow-hidden
     `}>
       
-      {/* Navegación Interna */}
       <nav className="flex-1 py-6 overflow-y-auto overflow-x-hidden space-y-6 scrollbar-hide">
-        {MENU_GROUPS.map((group, idx) => (
+        {filteredGroups.map((group, idx) => (
           <div key={idx} className="flex flex-col items-center w-full">
             {isOpen && (
               <h3 className="w-full px-6 mb-2 text-[10px] font-black uppercase tracking-[2px] text-text-muted/70 animate-fade-in">
