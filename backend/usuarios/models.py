@@ -3,37 +3,23 @@ from django.contrib.auth.models import AbstractUser
 
 class Usuario(AbstractUser):
     """
-    Modelo para usuarios del sistema (Administradores, Encargados, Delivery)
+    Modelo para usuarios del sistema
     """
     ROLES = [
-        ('Administrador', 'Administrador'),
-        ('Encargado', 'Encargado'),
-        ('Delivery', 'Delivery'),
+        ('admin', 'admin'),
+        ('encargad@', 'encargad@'),
+        ('cliente', 'cliente'),
     ]
 
     id_usuario = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    password_hash = models.CharField(max_length=255)
     rol = models.CharField(max_length=50, choices=ROLES)
     telefono = models.CharField(max_length=20, blank=True, null=True)
     activo = models.BooleanField(default=True)
 
-    # Sobrescribir campos de AbstractUser para evitar conflictos
-    groups = models.ManyToManyField(
-        'auth.Group',
-        related_name='usuario_set',
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-    )
-    user_permissions = models.ManyToManyField(
-        'auth.Permission',
-        related_name='usuario_set',
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-    )
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'nombre']
 
     class Meta:
         db_table = 'usuarios'
@@ -42,6 +28,10 @@ class Usuario(AbstractUser):
 
     def __str__(self):
         return f"{self.nombre} ({self.rol})"
+
+    @property
+    def id(self):
+        return self.id_usuario
 
 
 class Cliente(models.Model):

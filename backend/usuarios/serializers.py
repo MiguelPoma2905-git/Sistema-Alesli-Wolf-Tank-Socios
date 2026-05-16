@@ -38,6 +38,7 @@ class UsuarioCreateSerializer(serializers.ModelSerializer):
         validated_data.pop('password_confirm')
         password = validated_data.pop('password')
         user = Usuario(**validated_data)
+        user.username = validated_data.get('email') or validated_data.get('nombre')
         user.set_password(password)
         user.save()
         return user

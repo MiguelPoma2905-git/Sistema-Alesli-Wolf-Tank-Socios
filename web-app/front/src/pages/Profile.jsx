@@ -1,26 +1,26 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { 
-  User, MapPin, Gift, LogOut, Edit2, Plus, ArrowRight, Star, 
-  Trash2, ShieldCheck, Camera, ShoppingBag, Heart, X, Check 
+import {
+  User, MapPin, Gift, LogOut, Edit2, Plus, ArrowRight, Star,
+  Trash2, ShieldCheck, Camera, ShoppingBag, Heart, X, Check
 } from 'lucide-react'
+import { useApp } from '../context/AppContext'
 import { formatPrice } from '../utils/helpers'
 
 export default function Profile() {
   const navigate = useNavigate()
-  
-  // ESTADOS DE MODALES
-  const [activeModal, setActiveModal] = useState(null) // 'profile' | 'address' | 'password'
+  const { user: contextUser, isAuth } = useApp()
 
-  // DATOS SIMULADOS (Backend ready)
+  const [activeModal, setActiveModal] = useState(null)
+
   const [user, setUser] = useState({
-    name: 'Carlos Mendoza',
-    email: 'carlos.mendoza@email.com',
-    phone: '77712345',
-    points: 450,
+    name: contextUser?.nombre || 'Usuario',
+    email: contextUser?.email || 'usuario@alesli.bo',
+    phone: contextUser?.telefono || '77712345',
+    points: 0,
     avatar: null,
-    ordersCount: 12,
-    favoriteCat: 'Rosas Rojas'
+    ordersCount: 0,
+    favoriteCat: 'General'
   })
 
   const [addresses, setAddresses] = useState([
@@ -34,12 +34,25 @@ export default function Profile() {
     { id: 3, desc: 'Bono Bienvenida', date: '01 Ene', pts: 50, type: 'gain' }
   ]
 
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if (contextUser) {
+      setUser(prev => ({
+        ...prev,
+        name: contextUser.nombre || prev.name,
+        email: contextUser.email || prev.email,
+        phone: contextUser.telefono || prev.phone,
+      }))
+    }
+  }, [contextUser])
+
+  useEffect(() => {
+    if (!isAuth) navigate('/login')
+  }, [isAuth, navigate])
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-10 animate-fade-in transition-colors duration-500">
-      
-      {/* 1. HERO DE PERFIL Y STATS (Psicología de gratificación) */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         <div className="lg:col-span-8 flex flex-col md:flex-row items-center gap-8 bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
           <div className="relative group">
@@ -50,7 +63,7 @@ export default function Profile() {
               <Camera size={16} />
             </button>
           </div>
-          
+
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-[32px] font-black text-text-dark dark:text-white leading-tight mb-1">{user.name}</h1>
             <p className="text-[14px] text-text-muted font-medium mb-6">{user.email}</p>
@@ -65,13 +78,12 @@ export default function Profile() {
               </div>
             </div>
           </div>
-          
+
           <button onClick={() => setActiveModal('profile')} className="p-3 text-gray-400 hover:text-primary border border-gray-100 dark:border-white/10 rounded-xl hover:bg-pink-50 transition-all">
             <Edit2 size={20} />
           </button>
         </div>
 
-        {/* TARJETA DE PUNTOS DINÁMICA */}
         <div className="lg:col-span-4 bg-text-dark dark:bg-[#151522] rounded-2xl p-8 text-white relative overflow-hidden group border border-transparent dark:border-white/5">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
@@ -88,10 +100,8 @@ export default function Profile() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* IZQUIERDA: GESTIÓN DE DIRECCIONES Y SEGURIDAD */}
         <div className="lg:col-span-8 flex flex-col gap-8">
-          
-          {/* DIRECCIONES */}
+
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-[20px] font-black text-text-dark dark:text-white">Direcciones Guardadas</h3>
@@ -118,7 +128,6 @@ export default function Profile() {
             </div>
           </div>
 
-          {/* SEGURIDAD */}
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-xl flex items-center justify-center text-gray-400">
@@ -135,9 +144,8 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* DERECHA: HISTORIAL DE PUNTOS Y ACCESOS RÁPIDOS */}
         <div className="lg:col-span-4 flex flex-col gap-8">
-          
+
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
             <h3 className="text-[14px] font-black text-text-muted uppercase tracking-widest mb-6 flex items-center gap-2">
               <Star size={16} /> Historial de Puntos
@@ -165,7 +173,6 @@ export default function Profile() {
         </div>
       </div>
 
-      {/* MODAL SYSTEM (Abstracción técnica) */}
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setActiveModal(null)}></div>
@@ -200,7 +207,7 @@ export default function Profile() {
 
 function QuickLink({ icon, label, onClick, danger }) {
   return (
-    <button 
+    <button
       onClick={onClick}
       className={`w-full flex items-center justify-between p-4 bg-white dark:bg-[#1a1a2e] border rounded-2xl transition-all group ${danger ? 'border-red-100 hover:bg-red-50 text-red-500' : 'border-gray-100 dark:border-white/10 hover:border-primary/50 text-text-dark dark:text-gray-300'}`}
     >

@@ -1,30 +1,36 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Mail, Lock, User, ArrowRight, Sparkles, ShieldCheck, Loader2, AlertCircle, CheckCircle2, X } from 'lucide-react'
+import { Mail, Lock, User, ArrowRight, Sparkles, ShieldCheck, Loader2, AlertCircle, CheckCircle2, X, Briefcase, Users, UserCircle } from 'lucide-react'
+import { loginUser, registerUser } from '../services/auth'
+import { useApp } from '../context/AppContext'
+
+const ROLES = [
+  { value: 'cliente', label: 'Cliente', icon: UserCircle, desc: 'Compra y acumula puntos' },
+  { value: 'encargad@', label: 'Encargado', icon: Users, desc: 'Gestiona pedidos y entregas' },
+  { value: 'admin', label: 'Administrador', icon: Briefcase, desc: 'Control total del sistema' },
+]
 
 export default function Auth() {
   const navigate = useNavigate()
-  
-  // Estados de UI
+  const { setUser, setIsAuth } = useApp()
+
   const [isLogin, setIsLogin] = useState(true)
   const [isLoading, setIsLoading] = useState(false)
   const [showForgotModal, setShowForgotModal] = useState(false)
-  
-  // Estados de Formulario
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
-  
-  // Estados de Validación
+  const [role, setRole] = useState('cliente')
+
   const [emailError, setEmailError] = useState('')
-  const [passwordStrength, setPasswordStrength] = useState(0) // 0 a 3
+  const [passwordStrength, setPasswordStrength] = useState(0)
   const [authError, setAuthError] = useState('')
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 
-  // Validación en tiempo real del Email
   const handleEmailChange = (e) => {
     const val = e.target.value
     setEmail(val)
@@ -36,12 +42,10 @@ export default function Auth() {
     }
   }
 
-  // Validación en tiempo real de Contraseña (Fuerza)
   const handlePasswordChange = (e) => {
     const val = e.target.value
     setPassword(val)
     setAuthError('')
-    
     let strength = 0
     if (val.length >= 6) strength += 1
     if (/[A-Z]/.test(val) && /[0-9]/.test(val)) strength += 1
@@ -49,47 +53,63 @@ export default function Auth() {
     setPasswordStrength(strength)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    
-    // Simulación de error de validación
     if (emailError || password.length < 6) {
       setAuthError('Por favor, corrige los errores antes de continuar.')
       return
     }
-
     setIsLoading(true)
     setAuthError('')
-    
-    // Simulador de conexión al backend con posible error
-    setTimeout(() => {
-      if (isLogin && email === 'error@alesli.com') {
-        setAuthError('Credenciales incorrectas. Inténtalo de nuevo.')
-        setIsLoading(false)
+
+    try {
+      let data
+      if (isLogin) {
+        data = await loginUser(email, password)
       } else {
-        navigate('/perfil')
+        await registerUser({
+          nombre: name,
+          email,
+          password,
+          password_confirm: password,
+          rol: role,
+        })
+        data = await loginUser(email, password)
       }
-    }, 1500)
+
+      localStorage.setItem('access_token', data.tokens.access)
+      localStorage.setItem('refresh_token', data.tokens.refresh)
+      setUser(data.user)
+      setIsAuth(true)
+
+      navigate('/')
+    } catch (err) {
+      const msg = err.response?.data?.error
+        || err.response?.data?.detail
+        || err.response?.data?.email?.[0]
+        || 'Error al conectar con el servidor'
+      setAuthError(msg)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center px-4 md:px-12 py-12 animate-fade-in transition-colors duration-500">
-      
+    <div className="min-h-screen flex items-center justify-center px-4 md:px-12 py-12 animate-fade-in transition-colors duration-500 bg-bg-light dark:bg-[#0f0f1a]">
+
       <div className="max-w-[1000px] w-full grid grid-cols-1 lg:grid-cols-2 bg-white dark:bg-[#1a1a2e] rounded-2xl shadow-sm border border-gray-200 dark:border-white/10 overflow-hidden relative">
-        
-        {/* LADO IZQUIERDO: EL FORMULARIO */}
+
         <div className="p-8 md:p-14 flex flex-col justify-center relative">
-          
+
           <div className="mb-8">
             <h1 className="text-[32px] md:text-[36px] font-black text-text-dark dark:text-white leading-tight tracking-tight mb-2">
-              {isLogin ? 'Bienvenido' : 'Únete al club'}
+              {isLogin ? 'Bienvenido' : 'Crear cuenta'}
             </h1>
             <p className="text-[14px] text-text-muted dark:text-gray-400 font-medium">
-              {isLogin ? 'Ingresa para gestionar tus pedidos.' : 'Crea tu cuenta y empieza a acumular magia.'}
+              {isLogin ? 'Ingresa para gestionar tu cuenta.' : 'Selecciona tu rol y únete al sistema.'}
             </p>
           </div>
 
-          {/* MENSAJE DE ERROR GLOBAL */}
           {authError && (
             <div className="mb-6 p-4 rounded-xl bg-red-50 dark:bg-red-500/10 border border-red-100 dark:border-red-500/20 flex items-start gap-3 animate-fade-in-up">
               <AlertCircle size={18} className="text-red-500 shrink-0 mt-0.5" />
@@ -98,51 +118,77 @@ export default function Auth() {
           )}
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-            
-            {/* Campo Nombre (Solo Registro) */}
+
             {!isLogin && (
-              <div className="relative group animate-fade-in">
-                <input 
-                  type="text" 
-                  placeholder="Tu nombre completo" 
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  required 
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-6 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" 
-                />
-                <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" />
-              </div>
+              <>
+                <div className="relative group animate-fade-in">
+                  <input
+                    type="text"
+                    placeholder="Tu nombre completo"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                    className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-6 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  />
+                  <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" />
+                </div>
+
+                <div className="animate-fade-in">
+                  <label className="text-[11px] font-black text-text-muted dark:text-gray-400 uppercase tracking-widest pl-4 mb-3 block">
+                    Selecciona tu rol <span className="text-red-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {ROLES.map(r => {
+                      const Icon = r.icon
+                      const selected = role === r.value
+                      return (
+                        <button
+                          key={r.value}
+                          type="button"
+                          onClick={() => setRole(r.value)}
+                          className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all ${
+                            selected
+                              ? 'border-primary bg-pink-50 dark:bg-primary/10 scale-105 shadow-md'
+                              : 'border-gray-200 dark:border-white/10 bg-gray-50 dark:bg-white/5 hover:border-primary/50'
+                          }`}
+                        >
+                          <Icon size={22} className={selected ? 'text-primary' : 'text-gray-400'} />
+                          <span className={`text-[12px] font-black ${selected ? 'text-primary' : 'text-text-muted'}`}>{r.label}</span>
+                          <span className="text-[9px] text-text-muted text-center leading-tight">{r.desc}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+              </>
             )}
 
-            {/* Campo Email */}
             <div className="relative group">
-              <input 
-                type="email" 
-                placeholder="Correo electrónico" 
+              <input
+                type="email"
+                placeholder="Correo electrónico"
                 value={email}
                 onChange={handleEmailChange}
-                required 
-                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-12 pr-10 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none transition-all ${emailError ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-gray-200 dark:border-white/10 focus:border-primary focus:ring-1 focus:ring-primary'}`} 
+                required
+                className={`w-full bg-gray-50 dark:bg-white/5 border rounded-xl pl-12 pr-10 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none transition-all ${emailError ? 'border-red-500 focus:border-red-500 focus:ring-1 focus:ring-red-500' : 'border-gray-200 dark:border-white/10 focus:border-primary focus:ring-1 focus:ring-primary'}`}
               />
               <Mail size={18} className={`absolute left-4 top-1/2 -translate-y-1/2 transition-colors ${emailError ? 'text-red-500' : 'text-gray-400 group-focus-within:text-primary'}`} />
               {email && !emailError && <CheckCircle2 size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-green-500" />}
             </div>
 
-            {/* Campo Contraseña */}
             <div className="relative group flex flex-col gap-2">
               <div className="relative">
-                <input 
-                  type="password" 
-                  placeholder="Contraseña" 
+                <input
+                  type="password"
+                  placeholder="Contraseña"
                   value={password}
                   onChange={handlePasswordChange}
-                  required 
-                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-6 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" 
+                  required
+                  className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-6 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
                 <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" />
               </div>
-              
-              {/* Medidor de Fuerza de Contraseña (Solo en Registro) */}
+
               {!isLogin && password.length > 0 && (
                 <div className="flex items-center gap-2 px-1">
                   <div className="flex-1 flex gap-1 h-1.5">
@@ -159,7 +205,6 @@ export default function Auth() {
               )}
             </div>
 
-            {/* Acciones Secundarias */}
             {isLogin && (
               <div className="flex items-center justify-between mt-2">
                 <label className="flex items-center gap-2 cursor-pointer group">
@@ -169,7 +214,7 @@ export default function Auth() {
                   </div>
                   <span className="text-[13px] font-medium text-text-muted select-none">Recordarme</span>
                 </label>
-                <button type="button" onClick={() => setShowForgotModal(true)} className="text-[13px] font-black text-primary hover:text-secondary transition-colors">
+                <button type="button" onClick={() => setShowForgotModal(true)} className="text-[13px] font-black text-primary hover:text-secondary transition-all">
                   ¿Olvidaste tu contraseña?
                 </button>
               </div>
@@ -184,7 +229,6 @@ export default function Auth() {
             </button>
           </form>
 
-          {/* SEPARADOR Y SOCIAL LOGIN */}
           <div className="mt-8 flex items-center gap-4 before:h-[1px] before:flex-1 before:bg-gray-200 dark:before:bg-white/10 after:h-[1px] after:flex-1 after:bg-gray-200 dark:after:bg-white/10">
             <span className="text-[11px] font-black text-gray-400 uppercase tracking-widest">O continúa con</span>
           </div>
@@ -210,7 +254,6 @@ export default function Auth() {
           </div>
         </div>
 
-        {/* LADO DERECHO: BRANDING (Diseño maduro) */}
         <div className="hidden lg:flex flex-col items-center justify-center p-14 bg-bg-light dark:bg-[#151522] relative overflow-hidden text-center border-l border-gray-100 dark:border-white/5">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
@@ -218,13 +261,13 @@ export default function Auth() {
             <div className="w-16 h-16 bg-white dark:bg-white/5 rounded-2xl mx-auto flex items-center justify-center mb-8 border border-gray-100 dark:border-white/10 shadow-sm text-primary">
               <Sparkles size={28} />
             </div>
-            
+
             <h2 className="text-[32px] font-black leading-tight mb-4 text-text-dark dark:text-white">
-              Más que flores,<br/>conexiones.
+              Sistema de Gestión<br />Alesli
             </h2>
-            
+
             <p className="text-[14px] font-medium text-text-muted max-w-sm mx-auto mb-10 leading-relaxed">
-              Guarda tus direcciones, recibe recordatorios de fechas importantes y gana puntos por cada sonrisa que envías.
+              ERP/CRM completo para la gestión de pedidos, clientes, inventario y más.
             </p>
 
             <div className="flex flex-col gap-3 max-w-xs mx-auto text-left">
@@ -236,24 +279,22 @@ export default function Auth() {
         </div>
       </div>
 
-      {/* MODAL: RECUPERAR CONTRASEÑA */}
       {showForgotModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
-          {/* Backdrop con Blur */}
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setShowForgotModal(false)}></div>
-          
+
           <div className="bg-white dark:bg-[#1a1a2e] w-full max-w-md rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 relative z-10 animate-fade-in-up p-8">
             <button onClick={() => setShowForgotModal(false)} className="absolute top-6 right-6 text-gray-400 hover:text-text-dark dark:hover:text-white transition-colors">
               <X size={20} />
             </button>
-            
+
             <div className="w-12 h-12 bg-pink-50 dark:bg-primary/10 text-primary rounded-xl flex items-center justify-center mb-6">
               <Lock size={20} />
             </div>
-            
+
             <h3 className="text-[24px] font-black text-text-dark dark:text-white mb-2">Restablecer clave</h3>
             <p className="text-[14px] text-text-muted mb-6">Ingresa tu correo y te enviaremos un enlace mágico para volver a entrar.</p>
-            
+
             <div className="relative group mb-6">
               <input type="email" placeholder="Correo electrónico" className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl pl-12 pr-6 py-4 text-[14px] font-bold text-text-dark dark:text-white outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" />
               <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors" />
