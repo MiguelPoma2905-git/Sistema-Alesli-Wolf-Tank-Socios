@@ -87,7 +87,7 @@ export default function Profile() {
         <div className="lg:col-span-4 bg-text-dark dark:bg-[#151522] rounded-2xl p-8 text-white relative overflow-hidden group border border-transparent dark:border-white/5">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[11px] font-black uppercase tracking-[3px] text-primary flex items-center gap-2"><Star size={14} className="fill-primary" /> Alesli Gold</span>
+              <span className="text-[11px] font-black uppercase tracking-[3px] text-primary flex items-center gap-2"><Star size={14} className="fill-primary" /> Aleslí Gold</span>
               <button onClick={() => navigate('/recompensas')} className="text-[11px] font-bold text-gray-400 hover:text-white">Ver catálogo</button>
             </div>
             <p className="text-[48px] font-black leading-none mb-1">{user.points}</p>

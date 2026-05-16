@@ -70,6 +70,7 @@ class Producto(models.Model):
     precio_venta = models.DecimalField(max_digits=10, decimal_places=2)
     costo_estimado = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     imagen_url = models.TextField(blank=True, null=True)
+    imagen = models.ImageField(upload_to='productos/', blank=True, null=True)
     activo = models.BooleanField(default=True)
     stock = models.IntegerField(default=0, help_text="Stock disponible del producto")
 
@@ -332,8 +333,3 @@ class TransaccionesPuntos(models.Model):
 
     def __str__(self):
         return f"{self.tipo} - {self.cantidad} puntos"
-        if self.estado == 'ENTREGADO' and not self.foto_comprobante_entrega:
-            raise ValidationError('No se puede marcar como ENTREGADO sin la foto del arreglo de prueba de calidad.')
-
-    def __str__(self):
-        return f"Pedido #{self.id} - {self.cliente.nombre} - {self.estado}"

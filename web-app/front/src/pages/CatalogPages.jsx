@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Heart, ShoppingCart, ArrowLeft, Star, Info, CheckCircle, AlertCircle, Zap, Check, Loader2, LogIn, X, Search } from 'lucide-react'
+import { Heart, ShoppingCart, ArrowLeft, Star, Info, CheckCircle, AlertCircle, Zap, Check, Loader2, LogIn, X, Search, ShieldAlert } from 'lucide-react'
 import { useApp } from '../context/AppContext'
+import { useToast } from '../context/ToastContext'
 import ProductCard from '../components/shared/ProductCard'
 import FilterBar from '../components/ui/Filter'
 import Rating from '../components/ui/Rating'
@@ -38,7 +39,7 @@ function mapProduct(p) {
     id: p.id_producto,
     name: p.nombre,
     price: parseFloat(p.precio_venta),
-    img: p.imagen_url || '/images/placeholder_product.jpg',
+    img: p.imagen || p.imagen_url || '/images/placeholder_product.jpg',
     cat: p.categoria_nombre || 'General',
     desc: p.descripcion || '',
     rating: 5.0,
@@ -81,7 +82,7 @@ export function Flores() {
   return (
     <div className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto animate-fade-in transition-colors duration-500">
       <div className="mb-8">
-        <h1 className="text-[32px] md:text-[42px] font-black text-text-dark dark:text-white leading-tight transition-colors duration-500">Catálogo Alesli</h1>
+        <h1 className="text-[32px] md:text-[42px] font-black text-text-dark dark:text-white leading-tight transition-colors duration-500">Catálogo Aleslí</h1>
         <p className="text-[14px] md:text-[16px] text-text-muted mt-2 font-medium transition-colors duration-500">Todos nuestros productos en un solo lugar — seleccioná una categoría para explorar.</p>
       </div>
       <CatalogGrid products={mapped} filter={filter} setFilter={setFilter} cats={allCats} emptyMsg="No hay productos en esta categoría" />
@@ -116,9 +117,11 @@ function LoadingSkeleton() {
 
 export function DetalleProducto() {
   const { id } = useParams()
-  const { addToCart, toggleFav, isFav, isAuth, isCliente } = useApp()
+  const { addToCart, toggleFav, isFav, isAuth, isCliente, isAdmin, isEncargado } = useApp()
+  const { addToast } = useToast()
   const navigate = useNavigate()
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const [showRoleWarning, setShowRoleWarning] = useState(false)
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(true)
   const [qty, setQty] = useState(1)
@@ -146,7 +149,7 @@ export function DetalleProducto() {
 
   const checkCliente = () => {
     if (!isAuth) { setShowLoginPrompt(true); return false }
-    if (!isCliente) return false
+    if (!isCliente) { setShowRoleWarning(true); return false }
     return true
   }
 
@@ -247,6 +250,21 @@ export function DetalleProducto() {
           </div>
         </div>
       )}
+
+      {showRoleWarning && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" onClick={() => setShowRoleWarning(false)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="bg-white dark:bg-[#151522] w-full max-w-sm shadow-xl border border-gray-200/50 dark:border-white/10 relative z-10 p-8" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowRoleWarning(false)} className="absolute top-4 right-4 text-text-muted hover:text-text-dark dark:hover:text-white transition-colors"><X size={18} /></button>
+            <div className="text-center">
+              <div className="w-14 h-14 bg-red-50 flex items-center justify-center mx-auto mb-5"><ShieldAlert size={24} className="text-red-500" /></div>
+              <h3 className="text-[20px] font-heading font-bold text-text-dark dark:text-white mb-2">Acción denegada</h3>
+              <p className="text-[13px] text-text-muted mb-6 leading-relaxed">Los usuarios con rol <strong>Administrador</strong> o <strong>Encargado</strong> no pueden realizar compras. Ingresá con una cuenta de cliente para agregar productos al carrito.</p>
+              <button onClick={() => setShowRoleWarning(false)} className="w-full py-3 bg-gray-800 text-white text-[12px] font-bold uppercase tracking-wider hover:bg-gray-700 transition-all rounded-xl">Entendido</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -330,7 +348,7 @@ export function Ocasiones() {
   return (
     <div className="px-6 md:px-12 py-10 max-w-[1400px] mx-auto animate-fade-in space-y-16 transition-colors duration-500">
       <section className="text-center max-w-2xl mx-auto">
-        <h1 className="text-[36px] md:text-[52px] font-black text-text-dark dark:text-white transition-colors">Momentos Alesli</h1>
+        <h1 className="text-[36px] md:text-[52px] font-black text-text-dark dark:text-white transition-colors">Momentos Aleslí</h1>
         <p className="text-[15px] md:text-[17px] text-text-muted mt-4 font-medium transition-colors">Organizamos el año floral para que siempre estés un paso adelante.</p>
       </section>
 

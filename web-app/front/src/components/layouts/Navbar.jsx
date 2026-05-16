@@ -62,10 +62,10 @@ export default function Navbar({ onMenuToggle }) {
             <Menu size={22} />
           </button>
 
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigate('/')}>
+          <div className="flex items-center cursor-pointer group flex-1 max-w-[320px]" onClick={() => navigate('/')}>
             <img
-              src="/header_logo.jpg" alt="Alesli"
-              className="h-[55px] w-auto object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
+              src="/layout_logo.jpg" alt="Aleslí"
+              className="w-full h-auto max-h-[76px] object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-105"
             />
           </div>
         </div>

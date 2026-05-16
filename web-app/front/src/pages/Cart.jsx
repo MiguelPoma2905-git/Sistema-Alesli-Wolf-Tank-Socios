@@ -164,7 +164,7 @@ export default function Cart() {
                     <div className="max-w-[85%]">
                       <h3 className="text-[20px] font-black text-text-dark dark:text-white leading-tight transition-colors duration-500">{item.name}</h3>
                       <p className="text-[13px] text-text-muted dark:text-gray-400 mt-2 font-medium line-clamp-2 transition-colors duration-500">
-                        {item.desc || 'Preparación artesanal Alesli con garantía de frescura y diseño exclusivo.'}
+                        {item.desc || 'Preparación artesanal Aleslí con garantía de frescura y diseño exclusivo.'}
                       </p>
                     </div>
                     {/* Botón directo de Basurero conectado a la misma lógica inteligente */}
@@ -299,7 +299,7 @@ export default function Cart() {
         </div>
       </div>
 
-      <a href="https://wa.me/59177793200?text=Hola%20Alesli,%20tengo%20una%20duda%20con%20mi%20carrito%20de%20compras." target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform z-50 flex items-center justify-center">
+      <a href="https://wa.me/59177793200?text=Hola%20Aleslí,%20tengo%20una%20duda%20con%20mi%20carrito%20de%20compras." target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform z-50 flex items-center justify-center">
         <MessageCircle size={24} />
       </a>
     </div>

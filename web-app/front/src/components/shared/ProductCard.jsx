@@ -1,14 +1,17 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Heart, ShoppingCart, LogIn, X } from 'lucide-react'
+import { Heart, ShoppingCart, LogIn, X, ShieldAlert } from 'lucide-react'
 import { useApp } from '../../context/AppContext'
+import { useToast } from '../../context/ToastContext'
 import Rating from '../ui/Rating'
 import { formatPrice } from '../../utils/helpers'
 
 export default function ProductCard({ product }) {
-  const { addToCart, toggleFav, isFav, isAuth, isCliente } = useApp()
+  const { addToCart, toggleFav, isFav, isAuth, isCliente, isAdmin, isEncargado } = useApp()
+  const { addToast } = useToast()
   const navigate = useNavigate()
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+  const [showRoleWarning, setShowRoleWarning] = useState(false)
   
   if (!product) return null;
 
@@ -87,7 +90,7 @@ export default function ProductCard({ product }) {
             onClick={(e) => {
               e.stopPropagation()
               if (!isAuth) { setShowLoginPrompt(true); return }
-              if (!isCliente) { return }
+              if (!isCliente) { setShowRoleWarning(true); return }
               addToCart(product)
             }}
             className={`w-10 h-10 rounded-full flex items-center justify-center transition-all shrink-0 ${hasStock ? 'bg-bg-light dark:bg-white/5 text-text-dark dark:text-white hover:bg-primary hover:text-white shadow-sm' : 'bg-gray-100 dark:bg-white/5 text-gray-400 cursor-not-allowed'}`}
@@ -106,6 +109,21 @@ export default function ProductCard({ product }) {
               <h3 className="text-[20px] font-heading font-bold text-text-dark dark:text-white mb-2">Inicia sesión</h3>
               <p className="text-[13px] text-text-muted mb-6 leading-relaxed">Necesitás estar registrado como cliente para comprar. Ingresá o creá tu cuenta.</p>
               <button onClick={() => { setShowLoginPrompt(false); navigate('/login') }} className="w-full py-3 bg-primary text-white text-[12px] font-bold uppercase tracking-wider hover:bg-accent transition-all">Iniciar sesión</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showRoleWarning && (
+        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4" onClick={() => setShowRoleWarning(false)}>
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="bg-white dark:bg-[#151522] w-full max-w-sm shadow-xl border border-border-light/30 dark:border-white/10 relative z-10 p-8" onClick={e => e.stopPropagation()}>
+            <button onClick={() => setShowRoleWarning(false)} className="absolute top-4 right-4 text-text-muted hover:text-text-dark dark:hover:text-white transition-colors"><X size={18} /></button>
+            <div className="text-center">
+              <div className="w-14 h-14 bg-red-50 flex items-center justify-center mx-auto mb-5"><ShieldAlert size={24} className="text-red-500" /></div>
+              <h3 className="text-[20px] font-heading font-bold text-text-dark dark:text-white mb-2">Acción denegada</h3>
+              <p className="text-[13px] text-text-muted mb-6 leading-relaxed">Los usuarios con rol <strong>Administrador</strong> o <strong>Encargado</strong> no pueden realizar compras. Ingresá con una cuenta de cliente para agregar productos al carrito.</p>
+              <button onClick={() => setShowRoleWarning(false)} className="w-full py-3 bg-gray-800 text-white text-[12px] font-bold uppercase tracking-wider hover:bg-gray-700 transition-all rounded-xl">Entendido</button>
             </div>
           </div>
         </div>

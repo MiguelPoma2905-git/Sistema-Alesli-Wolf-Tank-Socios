@@ -40,7 +40,7 @@ export default function Checkout() {
   const [showErrors, setShowErrors] = useState(false) // Trigger para mostrar errores visuales
 
   const cardOptions = [
-    { id: 'free', name: 'Clásica Alesli', price: 0, img: '💌', desc: 'Sencilla y elegante. Gratis.' },
+    { id: 'free', name: 'Clásica Aleslí', price: 0, img: '💌', desc: 'Sencilla y elegante. Gratis.' },
     { id: 'love', name: 'Premium Romance', price: 25, img: '💌', desc: 'Papel texturizado lacrado.' },
     { id: 'bday', name: 'Premium Cumpleaños', price: 20, img: '💌', desc: 'Diseño festivo full color.' }
   ]

@@ -17,3 +17,6 @@ export const deleteOrder = (id) =>
 
 export const getOrderDetails = (orderId) =>
   api.get(`/detalles-pedido/?pedido=${orderId}`).then(r => r.data)
+
+export const changeOrderStatus = (id, estado) =>
+  api.post(`/pedidos/${id}/cambiar_estado/`, { estado }).then(r => r.data)

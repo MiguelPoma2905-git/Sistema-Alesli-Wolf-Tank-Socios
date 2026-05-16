@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ClipboardCopy, ChevronRight, CheckCircle, X, Clock, Truck } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { getOrders, updateOrder } from '../../services/pedidos'
+import { getOrders, changeOrderStatus } from '../../services/pedidos'
 import { useToast } from '../../context/ToastContext'
 import { ROUTES_ADMIN } from '../../utils/constants'
 import { formatPrice } from '../../utils/helpers'
@@ -44,7 +44,7 @@ export default function AdminPedidos() {
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      await updateOrder(id, { estado: newStatus })
+      await changeOrderStatus(id, newStatus)
       addToast(`Estado cambiado a "${newStatus}"`, 'success')
       load()
     } catch {

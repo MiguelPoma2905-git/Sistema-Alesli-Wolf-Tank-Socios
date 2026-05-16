@@ -23,7 +23,6 @@ class CategoriaViewSet(viewsets.ModelViewSet):
     """
     queryset = Categoria.objects.all()
     serializer_class = CategoriaSerializer
-    permission_classes = [IsAuthenticated]
 
 class ProveedorViewSet(viewsets.ModelViewSet):
     """
@@ -56,7 +55,6 @@ class ProductoViewSet(viewsets.ModelViewSet):
     """
     queryset = Producto.objects.all()
     serializer_class = ProductoSerializer
-    permission_classes = [IsAuthenticated]
 
     @action(detail=True, methods=['get'])
     def composicion(self, request, pk=None):

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Plus, Edit, Trash2, X, Image as ImageIcon, Upload } from 'lucide-react'
-import { getProducts, createProduct, updateProduct, deleteProduct, getCategories } from '../../services/productos'
+import { getProducts, createProduct, updateProduct, deleteProduct, getCategories, saveProductWithImage } from '../../services/productos'
 import { useToast } from '../../context/ToastContext'
 
 const statusBadgeClass = (status) => status ? 'badge-listo' : 'badge-cancelado'
@@ -14,6 +14,8 @@ export default function AdminProductos() {
   const [editingProduct, setEditingProduct] = useState(null)
   const [form, setForm] = useState({ nombre: '', precio_venta: '', id_categoria: '', imagen_url: '', stock: '' })
   const [imagenPreview, setImagenPreview] = useState(null)
+  const [imagenFile, setImagenFile] = useState(null)
+  const [uploading, setUploading] = useState(false)
 
   const load = async () => {
     setLoading(true)
@@ -32,6 +34,7 @@ export default function AdminProductos() {
     setEditingProduct(null)
     setForm({ nombre: '', precio_venta: '', id_categoria: '', imagen_url: '', stock: '' })
     setImagenPreview(null)
+    setImagenFile(null)
     setShowModal(true)
   }
 
@@ -44,12 +47,14 @@ export default function AdminProductos() {
       imagen_url: p.imagen_url || '',
       stock: p.stock ?? '',
     })
-    setImagenPreview(p.imagen_url || null)
+    setImagenPreview(p.imagen_url || p.imagen || null)
+    setImagenFile(null)
     setShowModal(true)
   }
 
   const handleSave = async () => {
     try {
+      setUploading(true)
       const payload = {
         codigo: editingProduct ? editingProduct.codigo : `PROD-${Date.now().toString(36).toUpperCase()}`,
         nombre: form.nombre,
@@ -59,17 +64,26 @@ export default function AdminProductos() {
         activo: true,
         stock: form.stock ? Number(form.stock) : 0,
       }
-      if (editingProduct) {
-        await updateProduct(editingProduct.id_producto, payload)
-        addToast('Producto actualizado', 'success')
+      if (imagenFile) {
+        if (editingProduct) {
+          await saveProductWithImage(payload, imagenFile, editingProduct.id_producto)
+        } else {
+          await saveProductWithImage(payload, imagenFile)
+        }
       } else {
-        await createProduct(payload)
-        addToast('Producto creado', 'success')
+        if (editingProduct) {
+          await updateProduct(editingProduct.id_producto, payload)
+        } else {
+          await createProduct(payload)
+        }
       }
+      addToast(editingProduct ? 'Producto actualizado' : 'Producto creado', 'success')
       setShowModal(false)
       load()
     } catch (err) {
       addToast('Error al guardar producto', 'error')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -112,9 +126,10 @@ export default function AdminProductos() {
       ) : (
         <div className="card overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full">
+              <table className="w-full">
               <thead>
                 <tr>
+                  <th className="tbl-th">Imagen</th>
                   <th className="tbl-th">Nombre</th>
                   <th className="tbl-th">Precio</th>
                   <th className="tbl-th">Stock</th>
@@ -126,6 +141,16 @@ export default function AdminProductos() {
               <tbody>
                 {products.map(p => (
                   <tr key={p.id_producto} className="tbl-row">
+                    <td className="tbl-td">
+                      <div className="w-10 h-10 rounded-lg overflow-hidden bg-gray-50 flex-shrink-0">
+                        <img
+                          src={p.imagen || p.imagen_url || '/images/placeholder_product.jpg'}
+                          alt={p.nombre}
+                          className="w-full h-full object-cover"
+                          onError={e => { e.target.src = '/images/placeholder_product.jpg' }}
+                        />
+                      </div>
+                    </td>
                     <td className="tbl-td font-semibold text-gray-800">{p.nombre}</td>
                     <td className="tbl-td">Bs. {p.precio_venta || '0.00'}</td>
                     <td className="tbl-td">
@@ -169,16 +194,38 @@ export default function AdminProductos() {
             </h3>
             <div className="space-y-4">
               <div>
-                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest block mb-2">Imagen URL</label>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={form.imagen_url}
-                    onChange={e => { setForm({...form, imagen_url: e.target.value}); setImagenPreview(e.target.value || null) }}
-                    placeholder="https://...imagen.jpg"
-                    className="flex-1 bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-[13px] font-bold outline-none focus:border-pink-500 transition-all"
-                  />
+                <label className="text-[11px] font-bold text-gray-500 uppercase tracking-widest block mb-2">Imagen</label>
+                <div className="flex gap-3 mb-3">
+                  <label className="flex-1 flex items-center justify-center gap-2 bg-gray-50 border border-dashed border-gray-200 rounded-xl px-4 py-3 cursor-pointer hover:border-pink-300 hover:bg-pink-50/30 transition-all">
+                    <Upload size={18} className="text-pink-500" />
+                    <span className="text-[12px] font-bold text-gray-500">{imagenFile ? imagenFile.name : 'Subir archivo'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={e => {
+                        const file = e.target.files[0]
+                        if (file) {
+                          setImagenFile(file)
+                          setImagenPreview(URL.createObjectURL(file))
+                          setForm({...form, imagen_url: ''})
+                        }
+                      }}
+                    />
+                  </label>
                 </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="flex-1 h-px bg-gray-200" />
+                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">O pegar URL</span>
+                  <div className="flex-1 h-px bg-gray-200" />
+                </div>
+                <input
+                  type="text"
+                  value={form.imagen_url}
+                  onChange={e => { setForm({...form, imagen_url: e.target.value}); setImagenFile(null); setImagenPreview(e.target.value || null) }}
+                  placeholder="https://...imagen.jpg"
+                  className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 text-[13px] font-bold outline-none focus:border-pink-500 transition-all"
+                />
                 {imagenPreview ? (
                   <div className="mt-3 rounded-xl overflow-hidden border border-gray-200">
                     <img src={imagenPreview} alt="" className="w-full h-[150px] object-contain bg-gray-50" onError={e => { e.target.style.display = 'none' }} />
@@ -212,8 +259,8 @@ export default function AdminProductos() {
                   ))}
                 </select>
               </div>
-              <button onClick={handleSave} className="w-full mt-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white py-3.5 rounded-xl font-black text-[13px] uppercase tracking-widest hover:-translate-y-px transition-all shadow-md">
-                {editingProduct ? 'Actualizar Producto' : 'Crear Producto'}
+              <button onClick={handleSave} disabled={uploading} className="w-full mt-4 bg-gradient-to-r from-pink-500 to-pink-600 text-white py-3.5 rounded-xl font-black text-[13px] uppercase tracking-widest hover:-translate-y-px transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed">
+                {uploading ? 'Subiendo...' : (editingProduct ? 'Actualizar Producto' : 'Crear Producto')}
               </button>
             </div>
           </div>

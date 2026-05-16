@@ -254,7 +254,7 @@ export default function Auth() {
 
           <div className="mt-8 text-center">
             <p className="text-[13px] font-bold text-text-muted">
-              {isLogin ? '¿Aún no tienes cuenta?' : '¿Ya eres parte de Alesli?'}
+              {isLogin ? '¿Aún no tienes cuenta?' : '¿Ya eres parte de Aleslí?'}
               <button onClick={() => {setIsLogin(!isLogin); setAuthError('');}} type="button" className="ml-2 text-primary hover:underline underline-offset-4 transition-all">
                 {isLogin ? 'Regístrate aquí' : 'Inicia Sesión'}
               </button>
@@ -269,13 +269,13 @@ export default function Auth() {
             <div className="relative mx-auto mb-8 flex items-center justify-center">
               <div className="absolute w-[260px] h-[260px] bg-primary/15 blur-[100px] rounded-full pointer-events-none" />
               <img
-                src="/header_logo.jpg" alt="Alesli"
+                src="/header_logo.jpg" alt="Aleslí"
                 className="w-[200px] h-auto object-contain relative z-10 drop-shadow-lg"
               />
             </div>
 
             <h2 className="text-[32px] font-heading font-black leading-tight mb-4 text-text-dark dark:text-white">
-              Sistema de Gestión<br />Alesli
+              Sistema de Gestión<br />Aleslí
             </h2>
 
             <p className="text-[14px] font-medium text-text-muted max-w-sm mx-auto mb-10 leading-relaxed">

@@ -22,7 +22,7 @@ export default function Footer() {
           <div className="flex flex-col">
             <div className="mb-4">
               <img
-                src="/header_logo.jpg" alt="Alesli"
+                src="/header_logo.jpg" alt="Aleslí"
                 className="h-[70px] w-auto object-contain drop-shadow-md"
               />
             </div>
@@ -78,7 +78,7 @@ export default function Footer() {
 
         {/* Suscripción Inferior */}
         <div className="border-t border-border-light/30 dark:border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <p className="text-[12px] text-text-muted font-bold">© 2026 Alesli Floricultura. Naturalmente para ti.</p>
+          <p className="text-[12px] text-text-muted font-bold">© 2026 Aleslí Floricultura. Naturalmente para ti.</p>
           <div className="flex w-full md:w-auto max-w-md border border-border-light/30 dark:border-white/10">
             <input type="email" placeholder="Tu email para novedades" className="flex-1 px-5 py-2.5 text-[12px] bg-bg-light dark:bg-white/5 outline-none text-text-dark dark:text-white placeholder-text-muted" />
             <button className="bg-primary text-white font-bold text-[11px] px-6 py-2.5 uppercase tracking-widest hover:bg-accent transition-colors">Unirme</button>
