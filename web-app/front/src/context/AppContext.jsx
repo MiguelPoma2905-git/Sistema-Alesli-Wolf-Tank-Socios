@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
+<<<<<<< HEAD
 import { mockUser } from '../data/mockData'
 
 const AppContext = createContext(null)
@@ -9,6 +10,47 @@ export function AppProvider({ children }) {
   const [isAuth, setIsAuth] = useState(true)
 
   // ─── Theme (MOTOR RECONSTRUIDO Y BLINDADO) ────────────────────
+=======
+import { getProfile } from '../services/auth'
+
+const AppContext = createContext(null)
+
+const ROLE_LABELS = {
+  admin: 'Administrador',
+  'encargad@': 'Encargado',
+  cliente: 'Cliente',
+}
+
+const ROLE_BADGES = {
+  admin: 'bg-secondary',
+  'encargad@': 'bg-blue-accent',
+  cliente: 'bg-primary',
+}
+
+export function AppProvider({ children }) {
+  const [user, setUser] = useState(null)
+  const [isAuth, setIsAuth] = useState(false)
+  const [notifications, setNotifications] = useState([])
+  const [stats, setStats] = useState(null)
+
+  useEffect(() => {
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      getProfile()
+        .then(userData => {
+          setUser(userData)
+          setIsAuth(true)
+        })
+        .catch(() => {
+          localStorage.removeItem('access_token')
+          localStorage.removeItem('refresh_token')
+        })
+    }
+  }, [])
+
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   const [dark, setDark] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') === 'dark'
@@ -16,6 +58,7 @@ export function AppProvider({ children }) {
     return false
   })
 
+<<<<<<< HEAD
   // Sincronización absoluta con el DOM y almacenamiento local
   useEffect(() => {
     const root = window.document.documentElement;
@@ -25,6 +68,16 @@ export function AppProvider({ children }) {
     } else {
       root.classList.remove('dark');
       localStorage.setItem('theme', 'light');
+=======
+  useEffect(() => {
+    const root = window.document.documentElement
+    if (dark) {
+      root.classList.add('dark')
+      localStorage.setItem('theme', 'dark')
+    } else {
+      root.classList.remove('dark')
+      localStorage.setItem('theme', 'light')
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
     }
   }, [dark])
 
@@ -32,7 +85,26 @@ export function AppProvider({ children }) {
     setDark(prev => !prev)
   }, [])
 
+<<<<<<< HEAD
   // ─── Cart ─────────────────────────────────────────────────────
+=======
+  const roleLabel = user ? (ROLE_LABELS[user.rol] || user.rol) : ''
+  const roleBadge = user ? (ROLE_BADGES[user.rol] || 'bg-gray-500') : ''
+  const isAdmin = user?.rol === 'admin'
+  const isEncargado = user?.rol === 'encargad@'
+  const isCliente = user?.rol === 'cliente'
+
+  const [favorites, setFavorites] = useState([])
+
+  const toggleFav = useCallback((id) => {
+    setFavorites(prev =>
+      prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]
+    )
+  }, [])
+
+  const isFav = useCallback((id) => favorites.includes(id), [favorites])
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   const [cart, setCart] = useState([])
 
   const addToCart = useCallback((product) => {
@@ -57,6 +129,7 @@ export function AppProvider({ children }) {
   const cartCount = cart.reduce((a, i) => a + i.qty, 0)
   const cartTotal = cart.reduce((a, i) => a + i.price * i.qty, 0)
 
+<<<<<<< HEAD
   // ─── Favorites ────────────────────────────────────────────────
   const [favorites, setFavorites] = useState([])
 
@@ -73,6 +146,16 @@ export function AppProvider({ children }) {
     <AppContext.Provider value={{
       user, setUser, isAuth, setIsAuth,
       dark, toggleDark,
+=======
+  return (
+    <AppContext.Provider value={{
+      user, setUser, isAuth, setIsAuth,
+      roleLabel, roleBadge, isAdmin, isEncargado, isCliente,
+      dark, toggleDark,
+      sidebarOpen, setSidebarOpen,
+      notifications, setNotifications,
+      stats, setStats,
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
       cart, addToCart, updateQty, removeFromCart, clearCart, cartCount, cartTotal,
       favorites, toggleFav, isFav,
     }}>
@@ -85,4 +168,8 @@ export const useApp = () => {
   const ctx = useContext(AppContext)
   if (!ctx) throw new Error('useApp must be used within AppProvider')
   return ctx
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9

@@ -7,6 +7,7 @@ export default function Footer() {
   const navigate = useNavigate()
 
   const paymentMethods = [
+<<<<<<< HEAD
     { name: 'Efectivo', icon: <Wallet size={16} />, color: 'bg-[#FFF0F8] text-primary dark:bg-primary/20 dark:text-[#FF4DB8]' },
     { name: 'Transf.', icon: <SendHorizontal size={16} />, color: 'bg-rose-50 text-rose-500 dark:bg-rose-500/20 dark:text-rose-400' },
     { name: 'Pagos QR', icon: <Smartphone size={16} />, color: 'bg-fuchsia-50 text-fuchsia-500 dark:bg-fuchsia-500/20 dark:text-fuchsia-400' },
@@ -22,6 +23,27 @@ export default function Footer() {
           {/* Columna 1: Marca */}
           <div className="flex flex-col">
             <div className="text-[28px] font-black bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-2">🌸 Alesli</div>
+=======
+    { name: 'Efectivo', icon: <Wallet size={16} />, color: 'bg-[#f9e5ed] text-primary dark:bg-primary/20 dark:text-primary' },
+    { name: 'Transf.', icon: <SendHorizontal size={16} />, color: 'bg-rose-100 text-rose-700 dark:bg-rose-500/20 dark:text-rose-400' },
+    { name: 'Pagos QR', icon: <Smartphone size={16} />, color: 'bg-fuchsia-100 text-fuchsia-700 dark:bg-fuchsia-500/20 dark:text-fuchsia-400' },
+    { name: 'Tarjetas', icon: <CreditCard size={16} />, color: 'bg-primary/10 text-primary-dark dark:bg-primary/20 dark:text-primary' },
+  ]
+
+  return (
+    <footer className="w-full bg-white dark:bg-[#090910] border-t border-border-light/30 dark:border-white/10 pt-16 pb-24 transition-colors">
+      <div className="max-w-[1400px] mx-auto px-6 md:px-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+
+          {/* Columna 1: Marca */}
+          <div className="flex flex-col">
+            <div className="mb-4">
+              <img
+                src="/header_logo.jpg" alt="Aleslí"
+                className="h-[70px] w-auto object-contain drop-shadow-md"
+              />
+            </div>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
             <p className="text-[13px] text-text-muted font-medium leading-relaxed mb-6">
               Creamos experiencias florales únicas en La Paz. Elegancia, luz y frescura en cada detalle para tus momentos más especiales.
             </p>
@@ -32,6 +54,7 @@ export default function Footer() {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* Columna 2: Enlaces Rápidos (EL RELLENO PERFECTO) */}
           <div className="flex flex-col">
             <h4 className="text-[14px] font-black text-text-dark dark:text-white mb-6 uppercase tracking-wider">Enlaces Rápidos</h4>
@@ -40,17 +63,36 @@ export default function Footer() {
               <button onClick={() => navigate('/regalos')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max">Regalos Especiales</button>
               <button onClick={() => navigate('/personalizar')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max">Personaliza tu Regalo</button>
               <button onClick={() => navigate('/pedidos')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max">Rastrear mi Pedido</button>
+=======
+          {/* Columna 2: Enlaces Rápidos */}
+          <div className="flex flex-col">
+            <h4 className="text-[14px] font-heading font-bold text-text-dark dark:text-white mb-6 uppercase tracking-wider border-b border-border-light/30 dark:border-white/10 pb-2">Enlaces Rápidos</h4>
+            <div className="space-y-3 flex flex-col">
+              <button onClick={() => navigate('/flores')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max border-b border-transparent hover:border-primary/30 pb-0.5">Catálogo de Flores</button>
+              <button onClick={() => navigate('/regalos')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max border-b border-transparent hover:border-primary/30 pb-0.5">Regalos Especiales</button>
+              <button onClick={() => navigate('/personalizar')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max border-b border-transparent hover:border-primary/30 pb-0.5">Personaliza tu Regalo</button>
+              <button onClick={() => navigate('/pedidos')} className="text-left text-[13px] text-text-muted font-bold hover:text-primary transition-colors w-max border-b border-transparent hover:border-primary/30 pb-0.5">Rastrear mi Pedido</button>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
             </div>
           </div>
 
           {/* Columna 3: Formas de Pago */}
           <div className="flex flex-col">
+<<<<<<< HEAD
             <h4 className="text-[14px] font-black text-text-dark dark:text-white mb-6 uppercase tracking-wider">Formas de Pago</h4>
             <div className="grid grid-cols-2 gap-3 max-w-[280px]">
               {paymentMethods.map((m) => (
                 <div key={m.name} className={`flex flex-col items-center justify-center py-3 px-2 rounded-2xl border border-transparent hover:border-primary/20 transition-all cursor-default ${m.color}`}>
                   <div className="mb-1.5">{m.icon}</div>
                   <span className="text-[10px] font-extrabold text-center uppercase tracking-tighter">{m.name}</span>
+=======
+            <h4 className="text-[14px] font-heading font-bold text-text-dark dark:text-white mb-6 uppercase tracking-wider border-b border-border-light/30 dark:border-white/10 pb-2">Formas de Pago</h4>
+            <div className="grid grid-cols-2 gap-3 max-w-[280px]">
+              {paymentMethods.map((m) => (
+                <div key={m.name} className={`flex flex-col items-center justify-center py-3 px-2 border border-border-light/30 dark:border-white/10 hover:border-primary/40 transition-all cursor-default ${m.color}`}>
+                  <div className="mb-1.5">{m.icon}</div>
+                  <span className="text-[10px] font-bold text-center uppercase tracking-tighter">{m.name}</span>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
                 </div>
               ))}
             </div>
@@ -58,6 +100,7 @@ export default function Footer() {
 
           {/* Columna 4: Contacto */}
           <div className="flex flex-col">
+<<<<<<< HEAD
             <h4 className="text-[14px] font-black text-text-dark dark:text-white mb-6 uppercase tracking-wider">Ubicación y Contacto</h4>
             <div className="space-y-4">
               <div className="flex items-center gap-3 text-[13px] text-text-muted font-bold group cursor-default">
@@ -66,6 +109,16 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-3 text-[13px] text-text-muted font-bold group cursor-default">
                 <div className="w-8 h-8 rounded-lg bg-pink-50 dark:bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-all flex-shrink-0"><Phone size={16} /></div>
+=======
+            <h4 className="text-[14px] font-heading font-bold text-text-dark dark:text-white mb-6 uppercase tracking-wider border-b border-border-light/30 dark:border-white/10 pb-2">Ubicación y Contacto</h4>
+            <div className="space-y-4">
+              <div className="flex items-center gap-3 text-[13px] text-text-muted font-bold group cursor-default">
+                <div className="w-8 h-8 bg-cream dark:bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-all flex-shrink-0"><MapPin size={16} /></div>
+                <span>Campos & Av. Arce, La Paz</span>
+              </div>
+              <div className="flex items-start gap-3 text-[13px] text-text-muted font-bold group cursor-default">
+                <div className="w-8 h-8 bg-cream dark:bg-primary/10 flex items-center justify-center text-primary group-hover:scale-110 transition-all flex-shrink-0"><Phone size={16} /></div>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
                 <div className="flex flex-col"><span>+591 77793200</span><span>+591 70634636</span></div>
               </div>
             </div>
@@ -73,11 +126,19 @@ export default function Footer() {
         </div>
 
         {/* Suscripción Inferior */}
+<<<<<<< HEAD
         <div className="border-t border-pink-light/30 dark:border-white/5 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <p className="text-[12px] text-text-muted font-bold">© 2026 Alesli Floricultura. Naturalmente para ti.</p>
           <div className="flex w-full md:w-auto max-w-md rounded-full overflow-hidden border border-pink-light/30 dark:border-white/10 shadow-inner">
             <input type="email" placeholder="Tu email para novedades" className="flex-1 px-5 py-2.5 text-[12px] bg-bg-light dark:bg-white/5 outline-none text-text-dark dark:text-white" />
             <button className="bg-primary text-white font-black text-[11px] px-6 py-2.5 uppercase tracking-widest hover:bg-secondary transition-colors">Unirme</button>
+=======
+        <div className="border-t border-border-light/30 dark:border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-6">
+          <p className="text-[12px] text-text-muted font-bold">© 2026 Aleslí Floricultura. Naturalmente para ti.</p>
+          <div className="flex w-full md:w-auto max-w-md border border-border-light/30 dark:border-white/10">
+            <input type="email" placeholder="Tu email para novedades" className="flex-1 px-5 py-2.5 text-[12px] bg-bg-light dark:bg-white/5 outline-none text-text-dark dark:text-white placeholder-text-muted" />
+            <button className="bg-primary text-white font-bold text-[11px] px-6 py-2.5 uppercase tracking-widest hover:bg-accent transition-colors">Unirme</button>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           </div>
         </div>
       </div>
@@ -86,7 +147,11 @@ export default function Footer() {
 }
 
 const SocialButton = ({ href, icon }) => (
+<<<<<<< HEAD
   <a href={href} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-xl bg-bg-light dark:bg-white/5 flex items-center justify-center text-primary hover:scale-110 hover:bg-primary hover:text-white transition-all shadow-sm border border-pink-light/20 dark:border-white/10">
+=======
+  <a href={href} target="_blank" rel="noreferrer" className="w-10 h-10 bg-cream dark:bg-white/5 flex items-center justify-center text-primary hover:scale-110 hover:bg-primary hover:text-white transition-all shadow-sm border border-border-light/30 dark:border-white/10">
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
     {icon}
   </a>
 )

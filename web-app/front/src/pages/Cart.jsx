@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Trash2, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, Plus, Truck, Info, Ticket, Edit3, MessageCircle } from 'lucide-react'
@@ -9,6 +10,45 @@ export default function Cart() {
   const { cart, updateQty, removeFromCart, addToCart, cartTotal } = useApp()
   const navigate = useNavigate()
 
+=======
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Trash2, ArrowLeft, ShoppingBag, CreditCard, ShieldCheck, Plus, Truck, Info, Ticket, Edit3, MessageCircle, Ban } from 'lucide-react'
+import { useApp } from '../context/AppContext'
+import { formatPrice } from '../utils/helpers'
+import { getProducts } from '../services/productos'
+
+export default function Cart() {
+  const { cart, updateQty, removeFromCart, addToCart, cartTotal, isAuth, isAdmin, isEncargado } = useApp()
+  const navigate = useNavigate()
+
+  const [allProducts, setAllProducts] = useState([])
+
+  useEffect(() => {
+    getProducts()
+      .then(data => setAllProducts(Array.isArray(data) ? data : []))
+      .catch(() => setAllProducts([]))
+  }, [])
+
+  if (isAdmin || isEncargado) {
+    return (
+      <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 animate-fade-in">
+        <div className="w-20 h-20 bg-red-50 dark:bg-red-500/10 rounded-full flex items-center justify-center text-red-500 mb-6">
+          <Ban size={36} />
+        </div>
+        <h2 className="text-[28px] font-black text-text-dark dark:text-white mb-3 text-center">Acción no permitida</h2>
+        <p className="text-[14px] text-text-muted text-center max-w-md leading-relaxed">
+          Tu rol de <strong>{isAdmin ? 'Administrador' : 'Encargado'}</strong> no permite realizar compras o pedidos.
+          Solo los <strong>Clientes</strong> pueden acceder al carrito y generar pedidos.
+        </p>
+        <button onClick={() => navigate('/')} className="mt-8 px-8 py-3 bg-primary text-white text-[12px] font-bold uppercase tracking-wider hover:bg-accent transition-all shadow-md">
+          Volver al inicio
+        </button>
+      </div>
+    )
+  }
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   const [discountCode, setDiscountCode] = useState('')
   const [orderNotes, setOrderNotes] = useState('')
   const [itemToDelete, setItemToDelete] = useState(null)
@@ -42,13 +82,28 @@ export default function Cart() {
   }
 
   // ─── MOTOR DE RECOMENDACIÓN DINÁMICO ───
+<<<<<<< HEAD
   const hasFlowers = cart.some(item => flowers.some(f => f.id === item.id))
   const hasPeluches = cart.some(item => peluches.some(p => p.id === item.id))
+=======
+  const mappedAll = allProducts.map(p => ({
+    id: p.id_producto,
+    name: p.nombre,
+    price: parseFloat(p.precio_venta),
+    img: p.imagen_url || '/images/placeholder_product.jpg',
+    cat: p.categoria_nombre || 'General',
+    desc: p.descripcion || '',
+  }))
+
+  const hasFlowers = cart.some(item => mappedAll.filter(p => p.cat !== 'Peluches').some(f => f.id === item.id))
+  const hasPeluches = cart.some(item => mappedAll.filter(p => p.cat === 'Peluches').some(p => p.id === item.id))
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   
   let suggestionPool = []
   let suggestionTitle = "Completa tu sorpresa"
 
   if (hasFlowers && !hasPeluches) {
+<<<<<<< HEAD
     suggestionPool = [...peluches, ...chocolates]
     suggestionTitle = "El complemento perfecto para tus flores"
   } else if (hasPeluches && !hasFlowers) {
@@ -56,6 +111,15 @@ export default function Cart() {
     suggestionTitle = "Añade unas flores a tu peluche"
   } else {
     suggestionPool = [...chocolates, ...peluches, ...gifts] 
+=======
+    suggestionPool = mappedAll.filter(p => p.cat === 'Peluches').concat(mappedAll.filter(p => p.cat === 'Chocolates'))
+    suggestionTitle = "El complemento perfecto para tus flores"
+  } else if (hasPeluches && !hasFlowers) {
+    suggestionPool = mappedAll.filter(p => p.cat !== 'Peluches')
+    suggestionTitle = "Añade unas flores a tu peluche"
+  } else {
+    suggestionPool = mappedAll.filter(p => ['Chocolates', 'Peluches', 'Regalos'].includes(p.cat))
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   }
 
   const isCartLarge = cart.length >= 4;
@@ -129,7 +193,11 @@ export default function Cart() {
                     <div className="max-w-[85%]">
                       <h3 className="text-[20px] font-black text-text-dark dark:text-white leading-tight transition-colors duration-500">{item.name}</h3>
                       <p className="text-[13px] text-text-muted dark:text-gray-400 mt-2 font-medium line-clamp-2 transition-colors duration-500">
+<<<<<<< HEAD
                         {item.desc || 'Preparación artesanal Alesli con garantía de frescura y diseño exclusivo.'}
+=======
+                        {item.desc || 'Preparación artesanal Aleslí con garantía de frescura y diseño exclusivo.'}
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
                       </p>
                     </div>
                     {/* Botón directo de Basurero conectado a la misma lógica inteligente */}
@@ -173,13 +241,21 @@ export default function Cart() {
           {!isCartLarge && lastMinuteAddons.length > 0 && (
             <div className="bg-gradient-to-br from-bg-light to-white dark:from-white/5 dark:to-[#1a1a2e] rounded-[36px] p-8 border border-pink-light/60 dark:border-white/5 shadow-sm transition-colors duration-500">
               <h3 className="text-[18px] font-black text-text-dark dark:text-white mb-6 flex items-center gap-2">
+<<<<<<< HEAD
                 {suggestionTitle} <span className="animate-pulse text-[20px]">✨</span>
+=======
+      {suggestionTitle}
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
                 {lastMinuteAddons.map((item, idx) => (
                   <div key={item.id} className="bg-white dark:bg-white/5 rounded-[24px] p-5 flex flex-col items-center text-center shadow-sm hover:shadow-card-md transition-all duration-300 hover:-translate-y-2 border border-transparent hover:border-primary/20 group animate-fade-in-up" style={{ animationDelay: `${(idx + 3) * 100}ms` }}>
                     <div className="absolute top-2 right-2 bg-primary/10 text-primary text-[10px] font-black px-2 py-1 rounded-lg">Ideal</div>
+<<<<<<< HEAD
                     <div className="text-[48px] mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 drop-shadow-sm">{item.img}</div>
+=======
+                    <div className="w-16 h-16 mb-3 transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3 drop-shadow-sm overflow-hidden rounded-xl bg-gradient-to-br from-pink-50 to-pink-100 dark:from-white/5 dark:to-transparent"><img src={item.img} alt={item.name} className="w-full h-full object-contain" /></div>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
                     <h4 className="text-[12px] font-bold text-text-dark dark:text-white h-[36px] line-clamp-2 mb-1">{item.name}</h4>
                     <span className="text-[15px] font-black text-primary mb-4">{formatPrice(item.price)}</span>
                     <button 
@@ -264,7 +340,11 @@ export default function Cart() {
         </div>
       </div>
 
+<<<<<<< HEAD
       <a href="https://wa.me/59177793200?text=Hola%20Alesli,%20tengo%20una%20duda%20con%20mi%20carrito%20de%20compras." target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform z-50 flex items-center justify-center">
+=======
+      <a href="https://wa.me/59177793200?text=Hola%20Aleslí,%20tengo%20una%20duda%20con%20mi%20carrito%20de%20compras." target="_blank" rel="noreferrer" className="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-xl hover:scale-110 transition-transform z-50 flex items-center justify-center">
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
         <MessageCircle size={24} />
       </a>
     </div>

@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+<<<<<<< HEAD
 import { 
   User, MapPin, Gift, LogOut, Edit2, Plus, ArrowRight, Star, 
   Trash2, ShieldCheck, Camera, ShoppingBag, Heart, X, Check 
 } from 'lucide-react'
+=======
+import {
+  User, MapPin, Gift, LogOut, Edit2, Plus, ArrowRight, Star,
+  Trash2, ShieldCheck, Camera, ShoppingBag, Heart, X, Check
+} from 'lucide-react'
+import { useApp } from '../context/AppContext'
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
 import { formatPrice } from '../utils/helpers'
 
 export default function Profile() {
   const navigate = useNavigate()
+<<<<<<< HEAD
   
   // ESTADOS DE MODALES
   const [activeModal, setActiveModal] = useState(null) // 'profile' | 'address' | 'password'
@@ -21,6 +30,20 @@ export default function Profile() {
     avatar: null,
     ordersCount: 12,
     favoriteCat: 'Rosas Rojas'
+=======
+  const { user: contextUser, isAuth } = useApp()
+
+  const [activeModal, setActiveModal] = useState(null)
+
+  const [user, setUser] = useState({
+    name: contextUser?.nombre || 'Usuario',
+    email: contextUser?.email || 'usuario@alesli.bo',
+    phone: contextUser?.telefono || '77712345',
+    points: 0,
+    avatar: null,
+    ordersCount: 0,
+    favoriteCat: 'General'
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
   })
 
   const [addresses, setAddresses] = useState([
@@ -34,12 +57,34 @@ export default function Profile() {
     { id: 3, desc: 'Bono Bienvenida', date: '01 Ene', pts: 50, type: 'gain' }
   ]
 
+<<<<<<< HEAD
   useEffect(() => { window.scrollTo(0, 0) }, [])
 
   return (
     <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-10 animate-fade-in transition-colors duration-500">
       
       {/* 1. HERO DE PERFIL Y STATS (Psicología de gratificación) */}
+=======
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    if (contextUser) {
+      setUser(prev => ({
+        ...prev,
+        name: contextUser.nombre || prev.name,
+        email: contextUser.email || prev.email,
+        phone: contextUser.telefono || prev.phone,
+      }))
+    }
+  }, [contextUser])
+
+  useEffect(() => {
+    if (!isAuth) navigate('/login')
+  }, [isAuth, navigate])
+
+  return (
+    <div className="max-w-[1200px] mx-auto px-4 md:px-8 py-10 animate-fade-in transition-colors duration-500">
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12">
         <div className="lg:col-span-8 flex flex-col md:flex-row items-center gap-8 bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
           <div className="relative group">
@@ -50,7 +95,11 @@ export default function Profile() {
               <Camera size={16} />
             </button>
           </div>
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           <div className="flex-1 text-center md:text-left">
             <h1 className="text-[32px] font-black text-text-dark dark:text-white leading-tight mb-1">{user.name}</h1>
             <p className="text-[14px] text-text-muted font-medium mb-6">{user.email}</p>
@@ -65,17 +114,28 @@ export default function Profile() {
               </div>
             </div>
           </div>
+<<<<<<< HEAD
           
+=======
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           <button onClick={() => setActiveModal('profile')} className="p-3 text-gray-400 hover:text-primary border border-gray-100 dark:border-white/10 rounded-xl hover:bg-pink-50 transition-all">
             <Edit2 size={20} />
           </button>
         </div>
 
+<<<<<<< HEAD
         {/* TARJETA DE PUNTOS DINÁMICA */}
         <div className="lg:col-span-4 bg-text-dark dark:bg-[#151522] rounded-2xl p-8 text-white relative overflow-hidden group border border-transparent dark:border-white/5">
           <div className="relative z-10">
             <div className="flex items-center justify-between mb-4">
               <span className="text-[11px] font-black uppercase tracking-[3px] text-primary flex items-center gap-2"><Star size={14} className="fill-primary" /> Alesli Gold</span>
+=======
+        <div className="lg:col-span-4 bg-text-dark dark:bg-[#151522] rounded-2xl p-8 text-white relative overflow-hidden group border border-transparent dark:border-white/5">
+          <div className="relative z-10">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-[11px] font-black uppercase tracking-[3px] text-primary flex items-center gap-2"><Star size={14} className="fill-primary" /> Aleslí Gold</span>
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
               <button onClick={() => navigate('/recompensas')} className="text-[11px] font-bold text-gray-400 hover:text-white">Ver catálogo</button>
             </div>
             <p className="text-[48px] font-black leading-none mb-1">{user.points}</p>
@@ -88,10 +148,15 @@ export default function Profile() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<<<<<<< HEAD
         {/* IZQUIERDA: GESTIÓN DE DIRECCIONES Y SEGURIDAD */}
         <div className="lg:col-span-8 flex flex-col gap-8">
           
           {/* DIRECCIONES */}
+=======
+        <div className="lg:col-span-8 flex flex-col gap-8">
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-[20px] font-black text-text-dark dark:text-white">Direcciones Guardadas</h3>
@@ -118,7 +183,10 @@ export default function Profile() {
             </div>
           </div>
 
+<<<<<<< HEAD
           {/* SEGURIDAD */}
+=======
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-12 h-12 bg-gray-50 dark:bg-white/5 rounded-xl flex items-center justify-center text-gray-400">
@@ -135,9 +203,14 @@ export default function Profile() {
           </div>
         </div>
 
+<<<<<<< HEAD
         {/* DERECHA: HISTORIAL DE PUNTOS Y ACCESOS RÁPIDOS */}
         <div className="lg:col-span-4 flex flex-col gap-8">
           
+=======
+        <div className="lg:col-span-4 flex flex-col gap-8">
+
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
           <div className="bg-white dark:bg-[#1a1a2e] p-8 rounded-2xl border border-gray-100 dark:border-white/10 shadow-sm">
             <h3 className="text-[14px] font-black text-text-muted uppercase tracking-widest mb-6 flex items-center gap-2">
               <Star size={16} /> Historial de Puntos
@@ -165,7 +238,10 @@ export default function Profile() {
         </div>
       </div>
 
+<<<<<<< HEAD
       {/* MODAL SYSTEM (Abstracción técnica) */}
+=======
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
       {activeModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 animate-fade-in">
           <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={() => setActiveModal(null)}></div>
@@ -200,7 +276,11 @@ export default function Profile() {
 
 function QuickLink({ icon, label, onClick, danger }) {
   return (
+<<<<<<< HEAD
     <button 
+=======
+    <button
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
       onClick={onClick}
       className={`w-full flex items-center justify-between p-4 bg-white dark:bg-[#1a1a2e] border rounded-2xl transition-all group ${danger ? 'border-red-100 hover:bg-red-50 text-red-500' : 'border-gray-100 dark:border-white/10 hover:border-primary/50 text-text-dark dark:text-gray-300'}`}
     >
@@ -210,4 +290,8 @@ function QuickLink({ icon, label, onClick, danger }) {
       <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
     </button>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9

@@ -10,6 +10,10 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+<<<<<<< HEAD
+=======
+    "axios": "^1.16.1",
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
     "clsx": "^2.1.1",
     "framer-motion": "^12.38.0",
     "lucide-react": "^1.14.0",
@@ -24,4 +28,8 @@
     "tailwindcss": "^4.3.0",
     "vite": "^8.0.12"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9

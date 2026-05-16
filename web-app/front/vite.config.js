@@ -7,4 +7,13 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+<<<<<<< HEAD
+=======
+  server: {
+    proxy: {
+      '/api': 'http://127.0.0.1:8000',
+      '/media': 'http://127.0.0.1:8000',
+    },
+  },
+>>>>>>> 53e1d1c2008caf04649d50daafa4f47ac4009bb9
 })
