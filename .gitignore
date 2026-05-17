@@ -30,3 +30,18 @@ Thumbs.db
 node_modules/
 dist/
 build/
+
+# Logs
+*.log
+
+# Python testing
+.pytest_cache/
+*.egg-info/
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Media uploads (entorno local)
+apps/api/media/*
