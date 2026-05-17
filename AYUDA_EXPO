@@ -1,0 +1,300 @@
+╔══════════════════════════════════════════════════════════════════╗
+║           ALESLÍ FLORICULTURA — GUÍA DE EXPOSICIÓN            ║
+║              ARQUITECTURA CLIENTE-SERVIDOR (5 min)             ║
+╚══════════════════════════════════════════════════════════════════╝
+
+╔══════════════════════════════════════════════════════════════════╗
+║  1. ARQUITECTURA DEL PROYECTO (Valeska — ~1 min 15 s)        ║
+╚══════════════════════════════════════════════════════════════════╝
+
+¿Qué es Cliente-Servidor?
+────────────────────────
+Es un modelo donde un cliente (navegador web) solicita recursos
+y un servidor (backend Django) los procesa y devuelve respuestas.
+Es la base de la web moderna.
+
+Nuestra arquitectura:
+────────────────────
+
+  ┌─────────────┐      Peticiones HTTP       ┌──────────────┐
+  │   React     │  ──────────────────────►   │   Django     │
+  │  Cliente    │  ◄──────────────────────   │   Servidor   │
+  │  (Frontend) │      Respuestas JSON       │  (Backend)   │
+  └─────────────┘                            └──────┬───────┘
+         │                                          │
+         │                                          ▼
+         │                                    ┌──────────────┐
+         │                                    │  PostgreSQL   │
+         └────────────────────────────────►   │  Base Datos   │
+                    Vite proxy (/api)          └──────────────┘
+
+
+VENTAJAS de usar Cliente-Servidor:
+
+1. ESCALABILIDAD
+   - Podemos tener múltiples clientes (web, móvil, etc.)
+   - El servidor es independiente, solo cambia la interfaz
+
+2. SEGURIDAD
+   - La lógica sensible y la base de datos están en el servidor
+   - El cliente nunca accede directamente a la BD
+   - Autenticación vía JWT tokens
+
+3. MANTENIBILIDAD
+   - Frontend y backend se desarrollan por separado
+   - Podemos cambiar React por otro framework sin tocar backend
+   - Cada equipo trabaja en su capa
+
+4. RENDIMIENTO
+   - El servidor maneja la carga pesada (cálculos, BD)
+   - El cliente solo renderiza lo que ve el usuario
+   - Caché y optimización en cada capa
+
+5. REUTILIZACIÓN
+   - Las mismas APIs sirven para web, móvil, terceros
+   - Un endpoint se consume desde cualquier cliente
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║  2. BASE DE DATOS (Boris — ~1 min 15 s)                      ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Motor: PostgreSQL — Base de datos relacional robusta y escalable.
+
+Base: alesli_db — Contiene todas las tablas del sistema.
+
+TABLAS PRINCIPALES (11 en total):
+
+┌────────────────────────────────────────────────────────────────┐
+│ USUARIOS (usuarios)                                           │
+│ ├── id_usuario (PK)                                           │
+│ ├── email (login principal)                                   │
+│ ├── nombre, telefono, direccion                               │
+│ ├── rol → 'Administrador', 'Encargado', 'Delivery', 'Cliente' │
+│ └── username, password (hash)                                 │
+├────────────────────────────────────────────────────────────────┤
+│ CATEGORÍAS (categorias)                                       │
+│ ├── id_categoria (PK)                                         │
+│ └── nombre, descripcion                                       │
+├────────────────────────────────────────────────────────────────┤
+│ PRODUCTOS (productos)                                         │
+│ ├── id_producto (PK)                                          │
+│ ├── id_categoria (FK → categorias)                            │
+│ ├── nombre, descripcion, precio_venta                         │
+│ ├── imagen (archivo), imagen_url (link externo)               │
+│ ├── stock, activo                                             │
+│ └── codigo (único por producto)                               │
+├────────────────────────────────────────────────────────────────┤
+│ PEDIDOS (pedidos)                                             │
+│ ├── id_pedido (PK)                                            │
+│ ├── id_cliente (FK → usuarios)                                │
+│ ├── id_cupon (FK → cupones, nullable)                         │
+│ ├── total_final, estado                                       │
+│ │   (Pendiente → En preparación → Listo → En camino →        │
+│ │    Entregado / Cancelado)                                   │
+│ ├── fecha_pedido, fecha_entrega                               │
+│ └── direccion_entrega                                         │
+├────────────────────────────────────────────────────────────────┤
+│ DETALLE_PEDIDO (detalle_pedido)                               │
+│ ├── id_detalle (PK)                                           │
+│ ├── id_pedido (FK → pedidos)                                  │
+│ ├── id_producto (FK → productos)                              │
+│ ├── cantidad, precio_unitario                                 │
+│ └── subtotal                                                  │
+├────────────────────────────────────────────────────────────────┤
+│ ENTREGAS_LOGISTICA (entregas_logistica)                       │
+│ ├── id_entrega (PK)                                           │
+│ ├── id_pedido (FK único → pedidos) — 1 pedido = 1 entrega    │
+│ ├── id_delivery (FK → usuarios con rol Delivery)              │
+│ │   estado_entrega → Asignado → En Ruta → Entregado/Fallido   │
+│ └── fecha_entrega_real, foto_evidencia_url                    │
+├────────────────────────────────────────────────────────────────┤
+│ OTRAS TABLAS:                                                 │
+│ ├── proveedores — Quién nos vende materiales                  │
+│ ├── materiales — Insumos para producción                     │
+│ ├── composicion_producto — Qué materiales lleva cada producto │
+│ ├── campanas_marketing — Campañas publicitarias               │
+│ ├── cupones — Descuentos vinculados a campañas                │
+│ ├── transacciones_financieras — Ingresos y egresos            │
+│ └── transacciones_puntos — Puntos de fidelidad del cliente    │
+└────────────────────────────────────────────────────────────────┘
+
+RELACIONES CLAVE:
+├── Un CLIENTE tiene muchos PEDIDOS (1:N)
+├── Un PEDIDO tiene muchos DETALLES (1:N)
+├── Un PRODUCTO pertenece a una CATEGORÍA (N:1)
+├── Un PEDIDO tiene una ENTREGA (1:1)
+├── Un DELIVERY tiene muchas ENTREGAS (1:N)
+└── Un PRODUCTO tiene muchos MATERIALES (vía composicion_producto, N:M)
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║  3. BACKEND — DJANGO REST (Miguel — ~1 min 15 s)            ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Tecnologías:
+───────────
+  Python 3.12 + Django 6.0 + Django REST Framework 3.14
+  JWT (JSON Web Tokens) para autenticación
+  Conexión a PostgreSQL vía psycopg[binary]
+
+ESTRUCTURA DEL BACKEND:
+──────────────────────
+  backend/
+    core/            → Configuración principal (settings.py, urls.py)
+    usuarios/        → App de usuarios, clientes, CRM
+    operaciones/     → App de negocio (productos, pedidos, entregas...)
+    sql/             → Script SQL de la base de datos
+    manage.py        → Punto de entrada Django
+
+ENDPOINTS PRINCIPALES (16 registrados en el router):
+─────────────────────────────────────────────────────
+
+  ┌──────────────┬──────────────────────────┬─────────────────────┐
+  │ MÓDULO       │ ENDPOINT                │ QUÉ HACE            │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Auth         │ POST /api/auth/token/    │ Login JWT           │
+  │              │ POST /api/auth/refresh/  │ Refrescar token     │
+  │              │ POST /api/usuarios/login/│ Login personalizado │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Usuarios     │ GET/POST /api/usuarios/  │ CRUD usuarios       │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Productos    │ GET /api/productos/      │ Listar productos    │
+  │              │ POST /api/productos/     │ Crear producto      │
+  │              │ GET /api/productos/{id}/ │ Ver detalle         │
+  │              │ PUT /api/productos/{id}/ │ Actualizar          │
+  │              │ DELETE /api/productos/   │ Eliminar            │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Categorías   │ GET /api/categorias/     │ Listar categorías   │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Pedidos      │ GET/POST /api/pedidos/   │ CRUD pedidos        │
+  │              │ POST .../cambiar_estado/  │ Cambiar estado      │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Entregas     │ GET/POST /api/entregas-  │ CRUD entregas       │
+  │              │   logistica/             │                     │
+  │              │ POST .../cambiar_estado/  │ Cambiar estado      │
+  ├──────────────┼──────────────────────────┼─────────────────────┤
+  │ Finanzas     │ GET /api/transacciones-  │ Transacciones       │
+  │              │   financieras/           │                     │
+  │              │ GET .../resumen/         │ Resumen financiero  │
+  └──────────────┴──────────────────────────┴─────────────────────┘
+
+CÓMO SE CONECTA:
+───────────────
+  1. El frontend hace peticiones HTTP a /api/...
+  2. Vite proxy redirige a http://localhost:8000 (Django)
+  3. Django REST Framework recibe la request
+  4. El ViewSet procesa y usa el Serializer para validar
+  5. El Modelo consulta/escribe en PostgreSQL
+  6. Django devuelve JSON con los datos solicitados
+  7. El frontend recibe y renderiza la respuesta
+
+FLUJO DE AUTENTICACIÓN:
+─────────────────────
+  Login → JWT Token (access + refresh)
+  → Se guarda en localStorage
+  → Cada petición lleva: Authorization: Bearer <token>
+  → SimpleJWT verifica en cada request
+  → Si expira, se refresca automáticamente
+
+PERMISOS:
+───────
+  - Rutas públicas: catálogo, categorías (solo lectura)
+  - Rutas protegidas: require token JWT válido
+  - Roles: Administrador (todo), Encargado (gestión),
+           Cliente (solo sus datos)
+
+
+╔══════════════════════════════════════════════════════════════════╗
+║  4. FRONTEND — REACT (Sofy — ~1 min 15 s)                    ║
+╚══════════════════════════════════════════════════════════════════╝
+
+Tecnologías:
+───────────
+  React 19 + Vite 8 + Tailwind CSS 4 + React Router 7
+  Axios para peticiones HTTP, Lucide para iconos
+
+ESTRUCTURA:
+──────────
+  web-app/front/src/
+    App.jsx             → Router principal (define todas las rutas)
+    context/            → AppContext (estado global, auth, dark mode)
+                         → ToastContext (notificaciones)
+    components/layouts/ → Navbar, Footer, Layout
+    components/admin/   → AdminLayout, AdminSideBar, AdminTopNav
+    components/shared/  → ProductCard, ProtectedRoute
+    pages/              → Dashboard, CatalogPages, Cart, Auth...
+    pages/admin/        → Dashboard, Productos, Pedidos, Entregas...
+    services/           → api.js (axios), auth.js, productos.js,
+                          pedidos.js, clientes.js, admin/dashboard.js
+    utils/              → constants.js, helpers.js
+
+FLUJO DE LAS PRINCIPALES SECCIONES:
+
+LOGIN (Auth.jsx)
+────────
+  1. Usuario completa email + contraseña
+  2. Se envía POST a /api/usuarios/login/
+  3. Django valida y devuelve access_token + refresh_token
+  4. Se guardan en localStorage
+  5. AppContext.setUser() actualiza el estado global
+  6. React Router redirige al Dashboard principal
+  7. En cada recarga, AppContext restaura sesión vía getProfile()
+
+HEADER / LANDING (Dashboard.jsx — sección hero)
+────────────────────────────────────────────
+  1. Hero con logo + eslogan "Naturalmente para ti"
+  2. Si NO hay sesión: botones Iniciar Sesión / Registrarse
+  3. Si hay sesión: muestra avatar + nombre del usuario
+  4. Si es admin: botón "Panel Admin" que lleva a /admin
+  5. Decoraciones animadas con CSS (flotantes, círculos, brillos)
+
+CATÁLOGO / PRODUCTOS (CatalogPages.jsx, Admin Catalogo.jsx)
+────────────────────────────────────────────────────
+  1. GET a /api/productos/ → lista de productos
+  2. Cada producto se renderiza con imagen, precio, categoría
+  3. Usuario puede hacer clic para ver detalle
+  4. Admin puede crear producto con imagen (FormData)
+     → saveProductWithImage() envía archivo a Django
+  5. ProductCard tiene botón "Pedir" que verifica rol:
+     - No auth → modal de login
+     - Cliente → va al carrito
+     - Admin/Encargado → modal de "Acción denegada"
+
+CREAR PRODUCTO (Admin Productos.jsx — modal)
+──────────────────────────────────────────
+  1. Admin hace clic en "Nuevo Producto"
+  2. Modal con formulario: imagen (archivo o URL), nombre,
+     precio, stock, categoría
+  3. Si hay archivo: se usa FormData con saveProductWithImage()
+  4. Si no: se envía JSON normal con createProduct()
+  5. Al guardar, se recarga la tabla
+
+DASHBOARD ADMIN (AdminDashboard.jsx)
+───────────────────────────────
+  1. Al cargar, hace 4 peticiones en paralelo:
+     - getProducts() → productos
+     - getOrders() → pedidos
+     - getClients() → clientes
+     - getDeliveries() → entregas
+  2. Renderiza KPIs: ingresos, pedidos, clientes, productos
+  3. Grilla de entregas (Entregados, En Ruta, Asignados, Fallidos)
+  4. Filtros rápidos de estado de pedidos
+  5. Tabla de órdenes recientes con modal de detalle
+  6. Soporte completo de modo oscuro (clase .dark en <html>)
+
+REGISTRO (Auth.jsx — modo registro)
+─────────────────────────────
+  1. Formulario con: nombre, email, teléfono, contraseña
+  2. Se envía POST a /api/usuarios/ (sin auth)
+  3. Django crea el usuario con rol "Cliente"
+  4. Se redirige al login para iniciar sesión
+
+FLUJO COMPLETO DEL SISTEMA (ejemplo: crear un pedido):
+────────────────────────────────────────────────────
+  Cliente ve catálogo → hace clic en "Pedir"
+  → (verifica rol + auth) → va al carrito
+  → checkout → crea pedido [POST /api/pedidos/]
+  → Admin ve pedido en /admin/pedidos → cambia estado
+  → Se asigna delivery → entrega en ruta
+  → Cliente ve estado actualizado en /pedidos o /mi-cuenta
